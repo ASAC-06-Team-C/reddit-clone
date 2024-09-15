@@ -135,3 +135,14 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 4rem;
+  background: lightgray;
+  line-height: 4rem;
+  text-align: center;
+}
