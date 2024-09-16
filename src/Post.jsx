@@ -1,5 +1,7 @@
-import { StrictMode, useState } from 'react'
+import { StrictMode, useState, Component, createRef } from 'react'
 import { createRoot } from 'react-dom/client'
+import { Editor } from '@toast-ui/react-editor'
+import '@toast-ui/editor/dist/toastui-editor.css'
 import '@/App.css'
 import '@/index.css'
 
@@ -53,5 +55,12 @@ function App() {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
+    <Editor
+      initialValue='cowboysj'
+      previewStyle='vertical'
+      height='600px'
+      initialEditType='wysiwyg'
+      useCommandShortcut={false}
+    />
   </StrictMode>,
 )
