@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Input } from '@/components/ui/input'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Separator } from '@/components/ui/separator'
 import '@/index.css'
 
 function Header({ children }) {
@@ -14,6 +15,7 @@ function Header({ children }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          marginTop: '4px',
         }}
       >
         <div style={{ minWidth: '280px' }}>
@@ -21,7 +23,10 @@ function Header({ children }) {
             <Tooltip>
               <TooltipTrigger>
                 <a href='/home'>
-                  <img src='src/components/header/reddit.png'></img>
+                  <img
+                    src='src/components/header/reddit.png'
+                    style={{ width: '80%', height: '80%' }}
+                  ></img>
                 </a>
               </TooltipTrigger>
               <TooltipContent>
@@ -31,7 +36,7 @@ function Header({ children }) {
           </TooltipProvider>
         </div>
         <div style={{ minWidth: '560px' }}>
-          <Input type='text' placeholder='Search Reddit'></Input>
+          <Input type='text' className='h-10' placeholder='Search Reddit'></Input>
         </div>
         <div style={{ justifyContent: 'flex-end', marginRight: '16px' }}>
           <TooltipProvider>
@@ -49,6 +54,7 @@ function Header({ children }) {
           </TooltipProvider>
         </div>
       </div>
+      <Separator />
       {children}
     </>
   )
