@@ -16,7 +16,7 @@ function Header({ children }) {
           justifyContent: 'space-between',
         }}
       >
-        <div style={{ width: '280px' }}>
+        <div style={{ minWidth: '280px' }}>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
@@ -33,7 +33,7 @@ function Header({ children }) {
         <div style={{ minWidth: '560px' }}>
           <Input type='text' placeholder='Search Reddit'></Input>
         </div>
-        <div style={{ justifyContent: 'flex-end' }}>
+        <div style={{ justifyContent: 'flex-end', marginRight: '16px' }}>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
