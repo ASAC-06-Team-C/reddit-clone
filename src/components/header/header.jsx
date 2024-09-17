@@ -1,18 +1,27 @@
 import { useState } from 'react'
+import { createRoot } from 'react-dom/client'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Input } from '@/components/ui/input'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import '@/index.css'
 
 function Header({ children }) {
   return (
     <>
-      <div style={{ height: '56px', display: 'flex' }}>
+      <div
+        style={{
+          height: '56px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
         <div style={{ width: '280px' }}>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
                 <a href='/home'>
-                  <img src='../assets/reddit.png'></img>
+                  <img src='src/components/header/reddit.png'></img>
                 </a>
               </TooltipTrigger>
               <TooltipContent>
@@ -21,10 +30,10 @@ function Header({ children }) {
             </Tooltip>
           </TooltipProvider>
         </div>
-        <div style={{ maxWidth: '560px' }}>
+        <div style={{ minWidth: '560px' }}>
           <Input type='text' placeholder='Search Reddit'></Input>
         </div>
-        <div>
+        <div style={{ justifyContent: 'flex-end' }}>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
@@ -34,7 +43,7 @@ function Header({ children }) {
                 </Avatar>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Open profile menu</p>
+                <p style={{}}>Open profile menu</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
