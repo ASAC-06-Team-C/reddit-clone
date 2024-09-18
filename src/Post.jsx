@@ -1,8 +1,10 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Editor } from '@toast-ui/react-editor'
+import { Link, Outlet } from 'react-router-dom'
+
 import {
   Accordion,
   AccordionContent,
@@ -13,20 +15,47 @@ import '@toast-ui/editor/dist/toastui-editor.css'
 import '@/index.css'
 
 function InputTitle() {
-  const [input, setInput] = useState('')
-  const asdf = useRef(null)
+  const [title, setTitle] = useState('')
+  const [isValid, setIsValid] = useState(true)
+  const titleValidRef = useRef(null)
+
+  function inputValidation(string) {
+    if (!string) {
+      setIsValid(false)
+    } else {
+      setIsValid(true)
+    }
+  }
+
+  useEffect(() => {
+    const checkClickOutside = (event) => {
+      if (!titleValidRef?.current?.contains(event.target)) {
+        inputValidation(title)
+      }
+    }
+    document.addEventListener('click', checkClickOutside)
+
+    return () => {
+      document.removeEventListener('click', checkClickOutside)
+    }
+  }, [title])
+
   return (
     <>
       <Input
+        ref={titleValidRef}
         type='text'
         placeholder='Title'
-        value={input}
-        className='rounded-sm'
+        value={title}
+        className={isValid ? 'rounded-sm' : 'rounded-sm border-red-600 border-2'}
         onChange={(e) => {
-          setInput(e.currentTarget.value)
+          setTitle(e.currentTarget.value)
         }}
       ></Input>
-      <p className='text-xs relative right-0 mt-1 mb-4 text-right'>{input.length}/300</p>
+      <div className='mt-2 mb-4 flex justify-between text-xs'>
+        <p className={isValid ? 'opacity-0' : ''}>{'❗이 입력란을 작성하세요.'}</p>
+        <p className='mr-2 text-right'>{title.length}/300</p>
+      </div>
     </>
   )
 }
@@ -56,9 +85,8 @@ function Post() {
           </Accordion>
         </div>
 
-        <Separator orientation='vertical' className='border-black' />
-        {/*얘는 대체 왜 안보일까요??????????  */}
-        <div style={{ marginLeft: '16px' }}>
+        <Separator orientation='vertical' />
+        <div style={{ marginLeft: '32px', width: '60%' }}>
           <h1>Create post</h1>
           <div style={{ height: '60px' }}>
             {' '}
@@ -66,26 +94,34 @@ function Post() {
             <br />
           </div>
           <div style={{ display: 'flex', marginTop: '8px', marginBottom: '8px', gap: '8px' }}>
-            <Button size='sm' variant='destructive'>
-              Text
-            </Button>
-            <Button size='sm' variant='destructive'>
-              Images & Video
-            </Button>
-            <Button size='sm' variant='destructive'>
-              Link
-            </Button>
+            <Link to='/'>
+              <Button size='sm' variant='ghost' className='font-semibold'>
+                Text
+              </Button>
+            </Link>
+            <Link to='/image'>
+              <Button size='sm' variant='ghost' className='font-semibold'>
+                Images & Video
+              </Button>
+            </Link>
+            <Link to='/link'>
+              <Button size='sm' variant='ghost' className='font-semibold'>
+                Link
+              </Button>
+            </Link>
           </div>
 
           <InputTitle />
-          <Editor
-            initialValue=' '
-            previewStyle='vertical'
-            height='200px'
-            initialEditType='wysiwyg'
-            useCommandShortcut={false}
-            placeholder='Body'
-          />
+          <Outlet />
+
+          <div className='flex justify-end mt-4 gap-4'>
+            <Button size='sm' className='font-semibold'>
+              Save Draft
+            </Button>
+            <Button size='sm' className='font-semibold'>
+              Post
+            </Button>
+          </div>
         </div>
       </div>
     </>
