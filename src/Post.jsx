@@ -15,7 +15,7 @@ import '@/index.css'
 function MenuBar() {
   return (
     <>
-      <div style={{ width: '240px', marginTop: '16px', marginRight: '16px', flexShrink: 0 }}>
+      <div style={{ width: '240px', margin: '16px', flexShrink: 0 }}>
         <Accordion type='single' collapsible>
           <AccordionItem value='item-1'>
             <AccordionTrigger>Community</AccordionTrigger>

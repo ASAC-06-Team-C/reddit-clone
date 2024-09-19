@@ -25,7 +25,7 @@ function Header({ children }) {
                 <a href='/'>
                   <img
                     src='src/components/header/reddit.png'
-                    style={{ width: '80%', height: '80%' }}
+                    style={{ width: '80%', height: '80%', marginLeft: '16px' }}
                   ></img>
                 </a>
               </TooltipTrigger>

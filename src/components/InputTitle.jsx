@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { Input } from '@/components/ui/input'
+import '@/index.css'
 
-function InputTitle() {
+function InputTitle({ reference }) {
   const [title, setTitle] = useState('')
   const [isValid, setIsValid] = useState(true)
-  const titleValidRef = useRef(null)
 
   useEffect(() => {
     function inputValidation(string) {
@@ -16,7 +16,7 @@ function InputTitle() {
     }
 
     const checkClickOutside = (event) => {
-      if (!titleValidRef?.current?.contains(event.target)) {
+      if (!reference?.current?.contains(event.target)) {
         inputValidation(title)
       }
     }
@@ -30,7 +30,7 @@ function InputTitle() {
   return (
     <>
       <Input
-        ref={titleValidRef}
+        ref={reference}
         type='text'
         placeholder='Title'
         value={title}
