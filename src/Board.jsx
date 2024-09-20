@@ -1,3 +1,6 @@
+import { marked } from 'marked'
+import { useState } from 'react'
+
 import { Button } from './components/ui/button'
 import {
   Card,
@@ -26,7 +29,20 @@ import talkImg from '@/resources/306434.svg'
 import shareImg from '@/resources/share-arrows.svg'
 import IconTextButton from '@/components/IconTextButton'
 
+function MDviewer({ markdown, setMarkdown }) {
+  return (
+    <div className='flex'>
+      <div>
+        <textarea onChange={(e) => setMarkdown(e.currentTarget.value)} />
+      </div>
+      <div dangerouslySetInnerHTML={{ __html: marked.parse(markdown) }} className='prose'></div>
+    </div>
+  )
+}
+
 function Board() {
+  const [markdown, setMarkdown] = useState('')
+
   return (
     <>
       <Card className='w-full'>
@@ -55,9 +71,7 @@ function Board() {
             </DropdownMenu>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className='viewer'># hello</div>
-        </CardContent>
+        <CardContent></CardContent>
         <CardFooter>
           <div className='flex gap-2'>
             <div className='rounded-full bg-gray-200'>
