@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import '@/index.css'
 
-function Header({ children }) {
+function Header() {
   return (
     <>
       <div
@@ -55,7 +55,6 @@ function Header({ children }) {
         </div>
       </div>
       <Separator />
-      {children}
     </>
   )
 }
