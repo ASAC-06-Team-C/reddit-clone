@@ -1,0 +1,33 @@
+.parent {
+  width: 90%;
+  margin: 10px auto;
+}
+
+header {
+  height: 56px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: #0e1113;
+  inline-size: 56;
+  border-width: 0 0 1px;
+  border-color: #3e4142;
+}
+
+.reddit-header-right-section {
+  float: left;
+  width: 15%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.button-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+body {
+  background: #0e1113;
+}
