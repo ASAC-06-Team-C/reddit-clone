@@ -19,14 +19,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import IconButton from '@/components/IconButton'
 
-import profileImg from '@/resources/blank-profile-picture-973460_960_720.webp'
-import threeDotsImg from '@/resources/three-dots.svg'
-import upArrowImg from '@/resources/up-arrow.svg'
-import downArrowImg from '@/resources/up-arrow-svgrepo-com.svg'
-import talkImg from '@/resources/306434.svg'
-import shareImg from '@/resources/share-arrows.svg'
+import IconButton from '@/components/IconButton'
 import IconTextButton from '@/components/IconTextButton'
 
 function MDviewer({ markdown, setMarkdown }) {
@@ -50,7 +44,7 @@ function Board() {
           <div className='flex justify-between'>
             <div className='flex items-center gap-2'>
               <Avatar>
-                <AvatarImage src={profileImg} />
+                <AvatarImage src={'img/blank-profile-picture-973460_960_720.webp'} />
                 <AvatarFallback>KOR</AvatarFallback>
               </Avatar>
               <div>강석훈</div>
@@ -60,7 +54,7 @@ function Board() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button size='icon' variant='ghost'>
-                  <img src={threeDotsImg} className='h-4 w-4'></img>
+                  <img src={'img/three-dots.svg'} className='h-4 w-4'></img>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -75,12 +69,12 @@ function Board() {
         <CardFooter>
           <div className='flex gap-2'>
             <div className='rounded-full bg-gray-200'>
-              <IconButton variant='ghost' iconSrc={upArrowImg} />
+              <IconButton variant='ghost' iconSrc={'img/up-arrow.svg'} />
               0
-              <IconButton variant='ghost' iconSrc={downArrowImg} />
+              <IconButton variant='ghost' iconSrc={'img/up-arrow-svgrepo-com.svg'} />
             </div>
-            <IconTextButton variant='secondary' iconSrc={talkImg} text='0' />
-            <IconTextButton variant='secondary' iconSrc={shareImg} text='Share' />
+            <IconTextButton variant='secondary' iconSrc={'img/306434.svg'} text='0' />
+            <IconTextButton variant='secondary' iconSrc={'img/share-arrows.svg'} text='Share' />
           </div>
         </CardFooter>
       </Card>
