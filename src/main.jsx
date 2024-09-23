@@ -1,33 +1,46 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import '@/index.css'
+
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Post from '@/components/Post'
 import TextEditor from '@/components/TextEditor'
 import UploadFile from '@/components/FileUpload'
 import LinkUpload from '@/components/LinkUpload'
-import AppLayout from '@/components/AppLayout'
+import BoardsPage from '@/pages/BoardsPage'
+import PostPage from '@/pages/PostPage'
+import BoardDetailPage from '@/pages/BoardDetailPage'
+import Layout from '@/components/Layout'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <AppLayout>
-        <Post />
-      </AppLayout>
-    ),
+    element: <Layout />,
     children: [
       {
-        path: '',
-        element: <TextEditor />,
+        index: true,
+        element: <BoardsPage />,
       },
       {
-        path: 'image',
-        element: <UploadFile />,
+        path: 'post',
+        element: <PostPage />,
+        children: [
+          {
+            index: true,
+            element: <TextEditor />,
+          },
+          {
+            path: 'image',
+            element: <UploadFile />,
+          },
+          {
+            path: 'link',
+            element: <LinkUpload />,
+          },
+        ],
       },
       {
-        path: 'link',
-        element: <LinkUpload />,
+        path: 'detail',
+        element: <BoardDetailPage />,
       },
     ],
   },

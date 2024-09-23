@@ -22,7 +22,7 @@ function Header() {
               <TooltipTrigger>
                 <a href='/'>
                   <img
-                    src='public\img\reddit.png'
+                    src='/img/reddit.png'
                     style={{ width: '80%', height: '80%', marginLeft: '16px' }}
                   ></img>
                 </a>

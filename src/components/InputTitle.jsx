@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import '@/index.css'
 
-function InputTitle({ reference }) {
+function InputTitle({ reference, isValid, setIsValid }) {
   const [title, setTitle] = useState('')
-  const [isValid, setIsValid] = useState(true)
 
   useEffect(() => {
     function inputValidation(string) {

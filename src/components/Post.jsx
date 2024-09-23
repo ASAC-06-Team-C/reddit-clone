@@ -27,9 +27,9 @@ function Post() {
           <br />
         </div>
         <div style={{ display: 'flex', marginTop: '8px', marginBottom: '8px', gap: '8px' }}>
-          <ChangeTypeLink linkTo={'/'} buttonName={'Text'} />
-          <ChangeTypeLink linkTo={'/image'} buttonName={'Images & Video'} />
-          <ChangeTypeLink linkTo={'/link'} buttonName={'Link'} />
+          <ChangeTypeLink linkTo={'/post'} buttonName={'Text'} />
+          <ChangeTypeLink linkTo={'/post/image'} buttonName={'Images & Video'} />
+          <ChangeTypeLink linkTo={'/post/link'} buttonName={'Link'} />
         </div>
         <Outlet />
       </div>
