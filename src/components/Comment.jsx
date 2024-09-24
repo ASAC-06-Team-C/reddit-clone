@@ -1,6 +1,8 @@
 import '@toast-ui/editor/dist/toastui-editor.css'
-import { Editor } from '@toast-ui/react-editor'
-import { useRef, useState } from 'react'
+import '@toast-ui/editor/dist/toastui-editor-viewer.css'
+import { Editor, Viewer } from '@toast-ui/react-editor'
+import { useEffect, useRef, useState } from 'react'
+import { Button } from '@/components/ui/button'
 
 function CommentBasic({ basicState }) {
   return (
@@ -10,29 +12,34 @@ function CommentBasic({ basicState }) {
   )
 }
 
-function CommentTextarea({ basicState, textOptions }) {
+function CommentTextarea({ basicState, textOptions, setComment }) {
+  const commentRef = useRef(null)
+
+  const commentText = () => {
+    const value = commentRef.current.value
+    commentRef.current.value = ''
+    setComment(value)
+  }
+
   return (
     <div>
-      <textarea />
+      <textarea ref={commentRef} />
       <div>
-        <button onClick={textOptions}>T</button>
-        <button onClick={basicState}>Canel</button>
-        <button>Comment</button>
+        <Button onClick={textOptions}>T</Button>
+        <Button onClick={basicState}>Canel</Button>
+        <Button onClick={commentText}>Comment</Button>
       </div>
     </div>
   )
 }
 
 function CommentTextEditor({ basicState, textOptions, editorButton }) {
-  const editorRef = useRef(null)
+  const commentRef = useRef(null)
 
-  const myCustomButton = document.createElement('button')
-  myCustomButton.addEventListener('click', editorButton)
-  myCustomButton.innerText = 'Markdown Editor'
   return (
     <>
       <Editor
-        // ref={editorRef}
+        // ref={commentRef}
         height='auto'
         initialEditType='wysiwyg'
         initialValue=' '
@@ -40,41 +47,27 @@ function CommentTextEditor({ basicState, textOptions, editorButton }) {
         hideModeSwitch={true}
         useCommandShortcut={true}
         usageStatistics={false}
-        toolbarItems={[
-          ['bold', 'italic', 'strike', 'heading'],
-          ['hr', 'quote'],
-          ['ul', 'ol', 'task', 'indent', 'outdent'],
-          ['table', 'image', 'link'],
-          ['code', 'codeblock'],
-          [
-            {
-              name: 'myCustom',
-              el: myCustomButton,
-            },
-          ],
-        ]}
       />
-      <button onClick={textOptions}>T</button>
-      <button onClick={basicState}>Canel</button>
-      <button>Comment</button>
+      <Button onClick={textOptions}>T</Button>
+      <Button onClick={basicState}>Canel</Button>
+      <Button>Comment</Button>
+      <Button onClick={editorButton}>Markdown Editor</Button>
     </>
   )
 }
 
-function CommentMarkdownEditor({ basicState, editorButton }) {
-  const editorRef = useRef(null)
+function CommentMarkdownEditor({ basicState, editorButton, setMarkdownText }) {
+  const commentRef = useRef(null)
 
-  const myCustomButton = document.createElement('button')
-  myCustomButton.innerText = 'Back to Rich Text Editor'
-  myCustomButton.addEventListener('click', editorButton)
+  const commentText = () => {
+    const commentInstance = commentRef.current.getInstance().getMarkdown()
 
-  const myCustomSpan = document.createElement('span')
-  myCustomSpan.innerText = 'Markdown Editor'
-
+    setMarkdownText(commentInstance)
+  }
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <Editor
-        // ref={editorRef}
+        ref={commentRef}
         height='auto'
         initialEditType='markdown'
         initialValue=' '
@@ -82,16 +75,12 @@ function CommentMarkdownEditor({ basicState, editorButton }) {
         hideModeSwitch={true}
         useCommandShortcut={true}
         usageStatistics={false}
-        toolbarItems={[
-          [
-            { name: 'myCustomSpan', el: myCustomSpan },
-            { name: 'myCustom', el: myCustomButton },
-          ],
-        ]}
+        toolbarItems={[]}
       />
 
-      <button onClick={basicState}>Cancel</button>
-      <button>Comment</button>
+      <Button onClick={basicState}>Cancel</Button>
+      <Button onClick={commentText}>Comment</Button>
+      <Button onClick={editorButton}>Back to Rich Text Editor</Button>
     </div>
   )
 }
@@ -105,6 +94,21 @@ function Comment() {
   const [textOptionsState, setTextOptionsState] = useState(true)
   const [editState, setEditState] = useState(true)
 
+  const testData = ['첫 번째 댓글입니다!', '두 번째 댓글입니다!', '세 번째 댓글입니다!']
+  const [comments, setComments] = useState(testData)
+  const [comment, setComment] = useState(null)
+  const [markdownText, setMarkdownText] = useState('')
+
+  useEffect(() => {
+    if (comment) setComments((prev) => [...prev, comment])
+    setComment(null)
+  }, [comment])
+
+  useEffect(() => {
+    if (markdownText) setComments((prev) => [...prev, markdownText])
+    setMarkdownText(null)
+  }, [markdownText])
+
   return (
     <div>
       <div>
@@ -114,6 +118,7 @@ function Comment() {
           <CommentTextarea
             basicState={() => StateManager(inputState, setInputState)}
             textOptions={() => StateManager(textOptionsState, setTextOptionsState)}
+            setComment={setComment}
           />
         ) : editState ? (
           <CommentTextEditor
@@ -125,9 +130,20 @@ function Comment() {
           <CommentMarkdownEditor
             basicState={() => StateManager(inputState, setInputState)}
             editorButton={() => StateManager(editState, setEditState)}
+            setMarkdownText={setMarkdownText}
           />
         )}
       </div>
+      <div>
+        <h3>댓글 목록:</h3>
+        {/* {comments.map((text, index) => (
+          <div key={index}>{text}</div>
+        ))} */}
+        {comments.map((text, index) => (
+          <Viewer key={index} initialValue={text} />
+        ))}
+      </div>
+      <div>{/* <Viewer key={markdownText} initialValue={markdownText} /> */}</div>
     </div>
   )
 }
