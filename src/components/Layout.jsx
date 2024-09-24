@@ -7,7 +7,7 @@ function Layout() {
   return (
     <>
       <Header />
-      <div className='flex h-screen'>
+      <div className='flex'>
         <MenuBar />
         <Separator orientation='vertical' />
         <Outlet />
