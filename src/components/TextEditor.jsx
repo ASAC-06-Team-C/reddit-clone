@@ -37,7 +37,7 @@ function TextEditor() {
         <ValidButton eventFunction={request} isValid={isValid}>
           Save Draft
         </ValidButton>
-        <ValidButton eventFunction={request} isValid={isValid} z>
+        <ValidButton eventFunction={request} isValid={isValid}>
           Post
         </ValidButton>
       </div>
