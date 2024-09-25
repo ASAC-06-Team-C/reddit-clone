@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { createRoot } from 'react-dom/client'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Input } from '@/components/ui/input'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -24,7 +22,7 @@ function Header() {
               <TooltipTrigger>
                 <a href='/'>
                   <img
-                    src='src/components/header/reddit.png'
+                    src='img/reddit.png'
                     style={{ width: '80%', height: '80%', marginLeft: '16px' }}
                   ></img>
                 </a>

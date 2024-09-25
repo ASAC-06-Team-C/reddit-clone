@@ -1,8 +1,6 @@
 import '@/App.css'
-import Post from '@/components/Post'
-import Comment from '@/components/Comment'
-import Board from '@/components/Board'
-import { Header } from '@radix-ui/react-accordion'
+import Header from '@/components/header'
+import RedditFirstAttachPage from '@/components/RedditFirstAttach'
 
 function App() {
   return <></>

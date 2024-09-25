@@ -6,13 +6,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import CustomIntersectionObsever from '@/components/CustomIntersectionObsever'
 
 function RedditFirstAttachPage() {
   const [arraySortBy, setArraySortBy] = useState('best')
 
   return (
     <>
-      <div className='fixed top-[56px] left-[45%] flex flex-low'>
+      <div className='fixed top-[56px] left-[45%] flex flex-low mt-1'>
         <Select
           onValueChange={(value) => {
             console.log(value)
@@ -44,7 +45,6 @@ function RedditFirstAttachPage() {
           </SelectContent>
         </Select>
       </div>
-      <div className='fixed top-'>dasds</div>
     </>
   )
 }
