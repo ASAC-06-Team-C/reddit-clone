@@ -1,4 +1,4 @@
-import RedditFirstAttachPage from '@/components/RedditFirstAttach'
+import RedditFirstAttach from '@/components/RedditFirstAttach'
 import { Card } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useEffect, useRef, useState, createContext, useContext } from 'react'
@@ -11,21 +11,22 @@ let options = {
 export default function CustomIntersectionObsever() {
   const [products, setProducts] = useState([])
   const [hasMore, setHasMore] = useState(true)
-  const [page, setPage] = useState(0)
+  const page = useRef(0)
 
-  console.log(`--rerenderingggg`)
-
-  // const contentRef = useRef(null)
   const elementRef = useRef(null)
 
   const fetchMoreItems = async () => {
     // 새로운 데이터를 불러올 API 엔드포인트에 요청을 보냅니다.
-    const response = await fetch(`https://dummyjson.com/products?limit=10&skip=${page * 10}`)
+
+    const response = await fetch(
+      `https://dummyjson.com/products?limit=10&skip=${page.current * 10}`,
+    )
 
     // 응답 데이터를 JSON 형식으로 파싱합니다.
     const data = await response.json()
 
     // 만약 더 이상 불러올 상품이 없다면 hasMore 상태를 false로 설정합니다.
+    // 진짜로 불러올 상품이 없으면 hasMore 상태를 변경해서 false로 두어라?
     if (data.products.length === 0) {
       setHasMore(false)
     } else {
@@ -34,7 +35,9 @@ export default function CustomIntersectionObsever() {
       setProducts((prevProducts) => [...prevProducts, ...data.products])
 
       // 페이지 번호를 업데이트하여 다음 요청에 올바른 skip 값을 사용합니다.
-      setPage((prevPage) => prevPage + 1)
+      // setPage((prevPage) => prevPage + 1)
+
+      page.current += 1
     }
   }
 
@@ -59,16 +62,21 @@ export default function CustomIntersectionObsever() {
     // 컴포넌트가 언마운트되거나 더 이상 관찰할 필요가 없을 때(observer를 해제할 때)반환.
     return () => {
       if (elementRef.current) {
-        console.log('지금이니!!!!!!')
         observer.unobserve(elementRef.current)
       }
     }
   }, [hasMore])
+  // hasMore의 상태가 바뀌면 useEffect 가 다시 호출 됨.
+  // 근데 hasMore 의 상태가 바뀌려면 호출하려는 데이터가 더 없어야 함 >> 불러올 데이터가 없을 때
+  // 그때는 자연스럽게 hasMore = false 되서 하단의 div 출력 안됨. --> 더이상 로드 안됨.
+  // 그러므로 elementRef.current 도 없어짐. -> 그러면 unobserve?
 
+  // 하단의 Load More Items div는 같이 리렌더링 되진 않음.
+  // 관찰하는 영역이 달라서 그런걸까?
   return (
     <>
-      <ScrollArea className='rounded-md border p-4' id='scroll-area'>
-        <RedditFirstAttachPage />
+      <ScrollArea id='scroll-area'>
+        <RedditFirstAttach />
         {products.map((item, index) => (
           <span key={index} style={{ width: '600px', margin: '0 auto' }} className={'mb-2'}>
             <img src={item.thumbnail} alt='상품 이미지' style={{ width: '100%', margin: '10px' }} />

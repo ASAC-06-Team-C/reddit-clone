@@ -6,17 +6,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import CustomIntersectionObsever from '@/components/CustomIntersectionObsever'
 
-function RedditFirstAttachPage() {
+function RedditFirstAttach() {
   const [arraySortBy, setArraySortBy] = useState('best')
+  const [viewType, setViewType] = useState('cardView')
 
   return (
     <>
-      <div className='fixed top-[56px] left-[45%] flex flex-low mt-1'>
+      {console.log(`뭐가 렌더링이 되니??`)}
+      <div className='relative left-[45%] flex flex-low mt-1'>
         <Select
           onValueChange={(value) => {
-            console.log(value)
             setArraySortBy(value)
           }}
         >
@@ -33,10 +33,10 @@ function RedditFirstAttachPage() {
         </Select>
         <Select
           onValueChange={(value) => {
-            console.log(value)
+            setViewType(value)
           }}
         >
-          <SelectTrigger className='w-[100px] right-0 bg-blue-500 p-4 shadow-md'>
+          <SelectTrigger className='w-[120px] right-0 bg-blue-500 p-4 shadow-md'>
             <SelectValue placeholder='View' />
           </SelectTrigger>
           <SelectContent>
@@ -49,4 +49,4 @@ function RedditFirstAttachPage() {
   )
 }
 
-export default RedditFirstAttachPage
+export default RedditFirstAttach
