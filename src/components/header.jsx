@@ -3,6 +3,8 @@ import { Input } from '@/components/ui/input'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import '@/App.css'
+import redditLogo from 'public/img/reddit-logo.svg'
+import redditAvatar from 'public/img/reddit-avatar.svg'
 
 function Header() {
   return (
@@ -20,11 +22,9 @@ function Header() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <a href='/'>
-                  <img
-                    src='/img/reddit.png'
-                    style={{ width: '80%', height: '80%', marginLeft: '16px' }}
-                  ></img>
+                <a href='/' className='flex items-center'>
+                  <img src={redditAvatar} className='h-8 w-8 mr-2 align-center'></img>
+                  <img src={redditLogo} style={{ fill: '#FF4500' }} className='h-6 w-20'></img>
                 </a>
               </TooltipTrigger>
               <TooltipContent>
