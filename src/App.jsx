@@ -1,17 +1,11 @@
 import '@/App.css'
-import RedditReactHeader from '@/RedditReactHeader'
-import RedditFirstAttachPage from '@/RedditFirstAttachPage'
+import Post from '@/components/Post'
+import Comment from '@/components/Comment'
+import Board from '@/components/Board'
+import { Header } from '@radix-ui/react-accordion'
 
 function App() {
-  return (
-    <>
-      <h1>hello world 1</h1>
-      <div className='prose'>
-        <h1>hello world 2</h1>
-      </div>
-      일반 글자
-    </>
-  )
+  return <></>
 }
 
 export default App
