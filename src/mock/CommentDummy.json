@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "postId": 123,
+    "userId": 0,
+    "content": "이것은 댓글입니다.",
+    "date": "2024-09-22",
+    "likes": 5,
+    "profileImage": "https://example.com/example.jpg",
+    "replies": [
+      {
+        "id": 2,
+        "postId": 123,
+        "userId": 0,
+        "content": "이것은 답글입니다.",
+        "date": "2024-09-22",
+        "likes": 2,
+        "profileImage": "https://example.com/example.jpg",
+        "replies": []
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "postId": 123,
+    "userId": 789,
+    "content": "# 마크다운 **이것은** 댓글2입니다.",
+    "date": "2024-09-22",
+    "likes": 5,
+    "profileImage": "https://example.com/example.jpg",
+    "replies": []
+  }
+]
