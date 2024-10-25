@@ -1,9 +1,9 @@
-import RedditFirstAttachPage from '@/components/RedditFirstAttach'
+import CustomIntersectionObsever from '@/components/CustomIntersectionObsever'
 
 function BoardsPage() {
   return (
     <>
-      <RedditFirstAttachPage />
+      <CustomIntersectionObsever />
     </>
   )
 }

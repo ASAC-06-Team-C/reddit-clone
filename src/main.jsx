@@ -10,14 +10,43 @@ import BoardsPage from '@/pages/BoardsPage'
 import PostPage from '@/pages/PostPage'
 import BoardDetailPage from '@/pages/BoardDetailPage'
 import Layout from '@/components/Layout'
+import BoardsPage from '@/pages/BoardsPage'
+import PostPage from '@/pages/PostPage'
+import BoardDetailPage from '@/pages/BoardDetailPage'
+import Layout from '@/components/Layout'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
+    path: '/',
+    element: <Layout />,
     children: [
       {
         index: true,
+        element: <BoardsPage />,
+      },
+      {
+        path: 'post',
+        element: <PostPage />,
+        children: [
+          {
+            index: true,
+            element: <TextEditor />,
+          },
+          {
+            path: 'image',
+            element: <UploadFile />,
+          },
+          {
+            path: 'link',
+            element: <LinkUpload />,
+          },
+        ],
+      },
+      {
+        path: 'detail',
+        element: <BoardDetailPage />,
         element: <BoardsPage />,
       },
       {
