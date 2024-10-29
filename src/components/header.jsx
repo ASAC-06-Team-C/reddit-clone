@@ -8,17 +8,8 @@ import redditAvatar from '/img/reddit-avatar.svg'
 import { Button } from '@/components/ui/button'
 import createCross from '/img/create-cross.svg'
 import searchIcon from '/img/search.svg'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
-import LoginButton from '@/components/LoginButton'
+import DialogButton from '@/components/DialogButton'
 
 function Header() {
   return (
@@ -72,7 +63,7 @@ function Header() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          {/* <LoginButton></LoginButton> */}
+          <DialogButton></DialogButton>
         </div>
       </div>
       <Separator />

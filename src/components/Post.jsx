@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Link, Outlet } from 'react-router-dom'
 import '@toast-ui/editor/dist/toastui-editor.css'
 import '@/index.css'
+import DraftButton from '@/components/DraftButton'
 
 const defaultString = ''
 const CreatedContext = createContext({ title: defaultString, setTitle: (state) => {} })
@@ -33,7 +34,11 @@ function Post() {
   return (
     <>
       <div style={{ marginLeft: '32px', width: '60%' }}>
-        <h1>Create post</h1>
+        <div className='flex items-center justify-between'>
+          <h1>Create post</h1>
+          <DraftButton />
+        </div>
+
         <div style={{ height: '60px' }}>
           {' '}
           {/* 나중에 여기에 커뮤니티 select기능 추가 계획*/}

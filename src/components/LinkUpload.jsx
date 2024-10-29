@@ -1,24 +1,41 @@
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import InputTitle from '@/components/InputTitle'
+import { useRef, useState } from 'react'
+import ValidButton from '@/components/ValidButton'
 
 function LinkUpload() {
-  //
-  // URL.canParse() 를 사용해서 링크의 validation을 진행할 수 있다.
-  // https://developer.mozilla.org/en-US/docs/Web/API/URL/canParse_static
+  const [isValid, setIsValid] = useState(true)
+  const titleRef = useRef(null)
+  const urlRef = useRef(null)
+
+  function request() {
+    const requestObject = {
+      post_title: titleRef?.current?.value,
+      post_content: urlRef?.current?.value,
+    }
+    console.log(requestObject)
+  }
+
+  function urlValidation(value) {
+    const url = value
+    const isValid = URL.canParse(url)
+    setIsValid(isValid)
+  }
+
   return (
     <>
-      <InputTitle />
+      <InputTitle reference={titleRef} isValid={isValid} setIsValid={setIsValid} />
       <div>
-        <Input />
+        <Input onChange={(e) => urlValidation(e.currentTarget.value)} ref={urlRef} />
       </div>
       <div className='flex justify-end mt-4 gap-4'>
-        <Button size='sm' className='font-semibold'>
+        <ValidButton eventFunction={request} isValid={isValid}>
           Save Draft
-        </Button>
-        <Button size='sm' className='font-semibold'>
+        </ValidButton>
+        <ValidButton eventFunction={request} isValid={isValid}>
           Post
-        </Button>
+        </ValidButton>
       </div>
     </>
   )
