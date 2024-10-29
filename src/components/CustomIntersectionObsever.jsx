@@ -1,4 +1,4 @@
-import RedditFirstAttach from '@/components/RedditFirstAttach'
+import RedditSelectItem from '@/components/RedditSelectItem'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useEffect, useRef, useState, createContext, useContext } from 'react'
 let options = {
@@ -65,7 +65,7 @@ export default function CustomIntersectionObsever() {
   return (
     <>
       <ScrollArea id='scroll-area'>
-        <RedditFirstAttach />
+        <RedditSelectItem />
         {products.map((item, index) => (
           <span key={index} style={{ width: '600px', margin: '0 auto' }} className={'mb-2'}>
             <img src={item.thumbnail} alt='상품 이미지' style={{ width: '100%', margin: '10px' }} />
