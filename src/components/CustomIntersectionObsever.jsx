@@ -1,6 +1,7 @@
-import RedditFirstAttach from '@/components/RedditFirstAttach'
+import RedditMainSelectItem from '@/components/RedditMainSelectItem'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useEffect, useRef, useState, createContext, useContext } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
 let options = {
   root: document.querySelector('scroll-area'), // 대상 객체의 가기성 확인.
   rootMargin: '0px', // root 요소의 범위를 확장할 수 있음.
@@ -65,7 +66,7 @@ export default function CustomIntersectionObsever() {
   return (
     <>
       <ScrollArea id='scroll-area'>
-        <RedditFirstAttach />
+        <RedditMainSelectItem />
         {products.map((item, index) => (
           <span key={index} style={{ width: '600px', margin: '0 auto' }} className={'mb-2'}>
             <img src={item.thumbnail} alt='상품 이미지' style={{ width: '100%', margin: '10px' }} />

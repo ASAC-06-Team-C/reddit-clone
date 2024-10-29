@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-function RedditFirstAttach() {
+function RedditMainSelectItem() {
   const [arraySortBy, setArraySortBy] = useState('best')
   const [viewType, setViewType] = useState('cardView')
 
@@ -48,4 +48,4 @@ function RedditFirstAttach() {
   )
 }
 
-export default RedditFirstAttach
+export default RedditMainSelectItem
