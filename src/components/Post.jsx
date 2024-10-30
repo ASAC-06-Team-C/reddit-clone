@@ -1,4 +1,4 @@
-import { useState, createContext } from 'react'
+import { useState, createContext, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Link, Outlet } from 'react-router-dom'
 import '@toast-ui/editor/dist/toastui-editor.css'
@@ -31,6 +31,9 @@ function ChangeTypeLink({ linkTo, buttonName }) {
 }
 
 function Post() {
+  const [draft, setDraft] = useState({})
+
+  useEffect(() => {}, [draft])
   return (
     <>
       <div style={{ marginLeft: '32px', width: '60%' }}>

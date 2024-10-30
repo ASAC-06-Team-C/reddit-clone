@@ -9,12 +9,26 @@ function LinkUpload() {
   const titleRef = useRef(null)
   const urlRef = useRef(null)
 
-  function request() {
+  async function request(isDraft) {
+    //user_no의 경우 추후 수정해야 합니다.
+
     const requestObject = {
+      user_no: 0,
       post_title: titleRef?.current?.value,
       post_content: urlRef?.current?.value,
+      post_draft: isDraft,
     }
-    console.log(requestObject)
+    const response = await fetch('http://localhost:8080/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(requestObject),
+    })
+
+    const data = await response.json()
+    console.log(data)
+    // 추후 toast 추가
   }
 
   function urlValidation(value) {
@@ -30,10 +44,10 @@ function LinkUpload() {
         <Input onChange={(e) => urlValidation(e.currentTarget.value)} ref={urlRef} />
       </div>
       <div className='flex justify-end mt-4 gap-4'>
-        <ValidButton eventFunction={request} isValid={isValid}>
+        <ValidButton eventFunction={() => request(true)} isValid={isValid}>
           Save Draft
         </ValidButton>
-        <ValidButton eventFunction={request} isValid={isValid}>
+        <ValidButton eventFunction={() => request(false)} isValid={isValid}>
           Post
         </ValidButton>
       </div>

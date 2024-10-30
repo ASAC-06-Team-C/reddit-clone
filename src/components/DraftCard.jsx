@@ -1,10 +1,11 @@
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import editImage from '/img/edit-button.svg'
 import deleteImage from '/img/delete-button.svg'
 
-export default function DraftList({ content }) {
+export default function DraftCard({ content }) {
   return (
-    <Button variant='ghost' className='w-96 rounded h-16'>
+    <Card variant='ghost' className='w-96 rounded-[8px] h-16 hover:bg-gray-100'>
       <div className='flex'>
         <div>
           <p className='font-bold'>{content.post_title}</p>
@@ -24,6 +25,6 @@ export default function DraftList({ content }) {
           <img src={deleteImage}></img>
         </Button>
       </div>
-    </Button>
+    </Card>
   )
 }

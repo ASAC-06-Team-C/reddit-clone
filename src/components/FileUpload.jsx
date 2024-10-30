@@ -10,12 +10,25 @@ function UploadFile() {
   const titleRef = useRef(null)
   const uploadRef = useRef(null)
 
-  function request() {
+  async function request(isDraft) {
     const requestObject = {
-      title: titleRef?.current?.value,
-      file: uploadRef?.current.value,
+      user_no: 0,
+      post_title: titleRef?.current?.value,
+      post_content: uploadRef?.current?.value,
+      post_draft: isDraft,
     }
-    console.log(requestObject)
+    console.log(titleRef?.current?.value)
+    const response = await fetch('http://localhost:8080/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(requestObject),
+    })
+
+    const data = await response.json()
+    console.log(data)
+    // 추후 toast 추가
   }
   return (
     <>
@@ -29,10 +42,10 @@ function UploadFile() {
         />
       </div>
       <div className='flex justify-end mt-4 gap-4'>
-        <ValidButton eventFunction={request} isValid={isValid}>
+        <ValidButton eventFunction={() => request(true)} isValid={isValid}>
           Save Draft
         </ValidButton>
-        <ValidButton eventFunction={request} isValid={isValid} z>
+        <ValidButton eventFunction={() => request(false)} isValid={isValid} z>
           Post
         </ValidButton>
       </div>

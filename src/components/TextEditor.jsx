@@ -10,12 +10,25 @@ function TextEditor() {
   const titleRef = useRef(null)
   const textRef = useRef(null)
 
-  function request() {
+  async function request(isDraft) {
+    //user_no의 경우 추후 수정해야 합니다.
     const requestObject = {
-      title: titleRef?.current?.value,
-      text: textRef?.current.getInstance().getMarkdown(),
+      user_no: 0,
+      post_title: titleRef?.current?.value,
+      post_content: textRef?.current.getInstance().getMarkdown(),
+      post_draft: isDraft,
     }
-    console.log(requestObject)
+    const response = await fetch('http://localhost:8080/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(requestObject),
+    })
+
+    const data = await response.json()
+    console.log(data)
+    // 추후 toast 추가
   }
 
   // 만약 그냥 HTML 형식 받아오고 싶으면 getHTML
@@ -34,10 +47,10 @@ function TextEditor() {
         ref={textRef}
       />
       <div className='flex justify-end mt-4 gap-4'>
-        <ValidButton eventFunction={request} isValid={isValid}>
+        <ValidButton eventFunction={() => request(false)} isValid={isValid}>
           Save Draft
         </ValidButton>
-        <ValidButton eventFunction={request} isValid={isValid}>
+        <ValidButton eventFunction={() => request(true)} isValid={isValid}>
           Post
         </ValidButton>
       </div>

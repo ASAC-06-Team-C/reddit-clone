@@ -6,7 +6,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import DraftList from '@/components/DraftList'
+import DraftCard from '@/components/DraftCard'
 
 const dummy1 = {
   post_title: 'test1',
@@ -30,8 +30,8 @@ export default function DraftButton() {
           <DialogTitle>Drafts</DialogTitle>
         </DialogHeader>
         <div className='grid gap-4 py-4'>
-          <DraftList content={dummy1}></DraftList>
-          <DraftList content={dummy2}></DraftList>
+          <DraftCard content={dummy1}></DraftCard>
+          <DraftCard content={dummy2}></DraftCard>
         </div>
       </DialogContent>
     </Dialog>
