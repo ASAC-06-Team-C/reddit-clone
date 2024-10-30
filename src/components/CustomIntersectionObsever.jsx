@@ -18,19 +18,21 @@ export default function CustomIntersectionObsever() {
   const fetchMoreItems = async () => {
     // 새로운 데이터를 불러올 API 엔드포인트에 요청을 보냅니다.
     const response = await fetch(
-      `https://dummyjson.com/products?limit=10&skip=${pageRef.current * 10}`,
+      // `https://dummyjson.com/products?limit=10&skip=${pageRef.current * 10}`,
+      `http://localhost:8080/posts?sort_type=hot&pages=1&content_count=10`,
     )
 
     // 응답 데이터를 JSON 형식으로 파싱합니다.
     const data = await response.json()
+    console.log(`111111 ----- ${data.length}`)
 
     // 만약 더 이상 불러올 상품이 없다면 hasMore 상태를 false로 설정합니다.
-    if (data.products.length === 0) {
+    if (data.length === 0) {
       setHasMore(false)
     } else {
       // 불러온 데이터를 현재 상품 목록에 추가합니다.
       // 이전 상품 목록(prevProducts)에 새로운 데이터(data.products)를 연결합니다.
-      setProducts((prevProducts) => [...prevProducts, ...data.products])
+      setProducts((prevProducts) => [...prevProducts, ...data])
 
       // 페이지 번호를 업데이트하여 다음 요청에 올바른 skip 값을 사용합니다.
       pageRef.current += 1
@@ -68,10 +70,16 @@ export default function CustomIntersectionObsever() {
       <ScrollArea id='scroll-area'>
         <RedditMainSelectItem />
         {products.map((item, index) => (
-          <span key={index} style={{ width: '600px', margin: '0 auto' }} className={'mb-2'}>
-            <img src={item.thumbnail} alt='상품 이미지' style={{ width: '100%', margin: '10px' }} />
-            {item.description}
-            {item.price}
+          <span key={index} style={{ width: '100%', margin: '0 auto' }} className={'mb-2'}>
+            {item.user_no} <br />
+            {item.post_no} <br />
+            {item.community_name} <br />
+            {item.post_title} <br />
+            {item.post_content} <br />
+            {item.post_vote_count} <br />
+            {item.post_comment_count} <br />
+            {item.post_write_date} <br />
+            <br />
           </span>
         ))}
         {hasMore && (
