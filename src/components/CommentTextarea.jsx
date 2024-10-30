@@ -5,27 +5,30 @@ import { useRef } from 'react'
 function CommentTextarea({
   setTextOptionState,
   setInputState,
-  setText,
+  createComment,
   inputValue,
   setInputValue,
-  comments,
-  currentUserId,
+  setComments,
+  currentUserNo,
 }) {
   const commentRef = useRef(null)
 
-  const commentText = (comments) => {
-    const newValue = {
-      id: comments.length + 1,
-      postId: 123,
-      userId: currentUserId,
-      content: inputValue,
-      date: new Date().toISOString(),
-      profileImage: 'https://example.com/example.jpg',
-      likes: 5,
-      replies: [],
+  const commentText = async () => {
+    const newCreateComment = {
+      post_no: 4, // 현재 게시물 번호
+      user_no: currentUserNo,
+      comment_content: inputValue,
+      comment_mother: 0,
+      comment_depth: 0,
     }
-    setText(newValue)
-    setInputValue('')
+
+    try {
+      const newComment = await createComment(newCreateComment)
+      setComments((prevComments) => [...prevComments, newComment])
+      setInputValue('')
+    } catch (error) {
+      console.error('error ', error)
+    }
   }
 
   const handleResizeHeight = () => {
@@ -60,7 +63,7 @@ function CommentTextarea({
       <div>
         <Button onClick={handleTextOption}>T</Button>
         <Button onClick={handleCancel}>Cancel</Button>
-        <Button onClick={() => commentText(comments)}>Comment</Button>
+        <Button onClick={() => commentText()}>Comment</Button>
       </div>
     </>
   )

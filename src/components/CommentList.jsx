@@ -1,170 +1,252 @@
 import CommentLike from '@/components/CommentLike'
 import { Viewer } from '@toast-ui/react-editor'
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
-import CommentReply from '@/components/CommentReply'
+import { useEffect, useState } from 'react'
+import { toCamelCase, formatDate } from '@/components/Comment'
 
-function NowTime(date) {
-  const commentDate = new Date(date)
-  const dateNow = new Date()
-  const second = Math.floor((dateNow - commentDate) / 1000)
+const CommentItem = ({
+  comment,
+  addReply,
+  deleteComment,
+  currentUserNo,
+  updateComment,
+  voteComment,
+}) => {
+  const [replyText, setReplyText] = useState('')
 
-  if (second < 60) return `${second} seconds ago`
-  if (second < 3600) return `${Math.floor(second / 60)} minutes ago`
-  if (second < 86400) return `${Math.floor(second / 3600)} hours ago`
-  return `${Math.floor(second / 86400)} days ago`
+  return (
+    <div style={{ marginLeft: comment.commentDepth * 25, marginBottom: '30px' }}>
+      <CommentHeader comment={comment} />
+      <Viewer initialValue={comment.commentContent} />
+      <CommentActions
+        comment={comment}
+        currentUserNo={currentUserNo}
+        deleteComment={deleteComment}
+        addReply={addReply}
+        replyText={replyText}
+        setReplyText={setReplyText}
+        updateComment={updateComment}
+        voteComment={voteComment}
+      />
+      {comment.replies?.map((reply) => (
+        <CommentItem
+          key={reply.commentNo}
+          comment={reply}
+          addReply={addReply}
+          deleteComment={deleteComment}
+          currentUserNo={currentUserNo}
+          updateComment={updateComment}
+          voteComment={voteComment}
+        />
+      ))}
+    </div>
+  )
 }
 
-function CommentList({ comments, deleteComment, currentUserId, setComments }) {
-  const [replyStates, setReplyStates] = useState({})
+const CommentHeader = ({ comment }) => (
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <img
+      src={comment.userProfile}
+      style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '20px' }}
+    />
+    <span>{comment.userNickname || 'Name'}</span>
+    <span style={{ marginLeft: '15px' }}>{formatDate(comment.commentWriteDate)}</span>
+  </div>
+)
 
-  const handleReply = (commentId) => {
-    setReplyStates((prev) => ({
-      ...prev,
-      [commentId]: !prev[commentId],
-    }))
+const CommentActions = ({
+  comment,
+  currentUserNo,
+  deleteComment,
+  addReply,
+  replyText,
+  setReplyText,
+  updateComment,
+  voteComment,
+}) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editText, setEditText] = useState(comment.commentContent)
+
+  const handleReply = () => {
+    if (replyText.trim()) {
+      addReply(comment.commentNo, replyText)
+      setReplyText('')
+    }
   }
 
-  const addReply = (parentId, newReply, replyToId = null) => {
-    setComments((prevComments) => {
-      const updatedComments = prevComments.map((comment) => {
-        if (comment.id === parentId) {
-          return {
-            ...comment,
-            replies: [...comment.replies, newReply],
-          }
-        }
+  const handleUpdate = () => {
+    if (editText.trim()) {
+      updateComment({
+        user_no: currentUserNo,
+        comment_no: comment.commentNo,
+        comment_content: editText,
+      })
+      setIsEditing(false)
+    }
+  }
 
-        if (comment.replies.some((reply) => reply.id === replyToId)) {
-          return {
-            ...comment,
-            replies: comment.replies.map((reply) => {
-              if (reply.id === replyToId) {
-                return {
-                  ...reply,
-                  replies: [...reply.replies, newReply],
+  return (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <CommentLike
+        like={comment.commentVoteCount}
+        voteComment={voteComment}
+        commentNo={comment.commentNo}
+      />
+      {comment.userNo === currentUserNo && (
+        <>
+          {isEditing ? (
+            <>
+              <input type='text' value={editText} onChange={(e) => setEditText(e.target.value)} />
+              <Button onClick={handleUpdate}>저장</Button>
+              <Button onClick={() => setIsEditing(false)}>취소</Button>
+            </>
+          ) : (
+            <>
+              <Button onClick={() => setIsEditing(true)}>수정</Button>
+              <Button
+                onClick={() =>
+                  deleteComment({ user_no: currentUserNo, comment_no: comment.commentNo })
                 }
-              }
-              return reply
-            }),
-          }
-        }
-        return comment
-      })
-      return updatedComments
-    })
+              >
+                삭제
+              </Button>
+            </>
+          )}
+        </>
+      )}
+      <Button onClick={handleReply}>답글</Button>
+      <input
+        type='text'
+        value={replyText}
+        onChange={(e) => setReplyText(e.target.value)}
+        placeholder='답글 입력'
+        style={{ marginLeft: '10px' }}
+      />
+    </div>
+  )
+}
+
+function CommentList({
+  comments,
+  deleteComment,
+  currentUserNo,
+  setComments,
+  createComment,
+  updateComment,
+  voteComment,
+}) {
+  useEffect(() => {
+    getComment()
+  }, [])
+
+  // 댓글 get
+  const getComment = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:8080/comments?post_no=4&sort_type=asc&post_comment_count=10&comment_page=2',
+      )
+      const responseComment = (await response.json()).map(toCamelCase)
+      setComments(commentTree(responseComment))
+    } catch (error) {
+      console.error('댓글을 불러오는 중 오류 발생:', error)
+    }
   }
 
-  const deleteReply = (parentCommentId, replyId) => {
-    setComments((prevComments) => {
-      const updatedComments = prevComments.map((comment) => {
-        if (comment.id === parentCommentId) {
-          return {
-            ...comment,
-            replies: comment.replies.filter((reply) => reply.id !== replyId), // 답글 삭제
-          }
+  const commentTree = (comments) => {
+    const map = {}
+    const tree = []
+
+    comments.forEach((comment) => {
+      comment.replies = []
+      map[comment.commentNo] = comment
+
+      if (comment.commentMother === 0) {
+        tree.push(comment) // 최상위 댓글이면 루트로 추가
+      } else {
+        const parent = map[comment.commentMother]
+        if (parent) {
+          parent.replies.push(comment) // 부모 댓글의 replies에 추가
         }
-        return comment
-      })
-      return updatedComments
+      }
     })
+
+    console.log('Map:', map)
+    console.log('Roots:', tree)
+
+    return tree
   }
 
-  function Replies({ replies, parentId }) {
-    const [replyStates, setReplyStates] = useState({})
-
-    const handleReply = (replyId) => {
-      setReplyStates((prev) => ({
-        ...prev,
-        [replyId]: !prev[replyId],
-      }))
+  const addReply = async (motherNo, text) => {
+    // 재귀적으로 댓글을 찾는 함수
+    const findComment = (comments, targetNo) => {
+      for (let comment of comments) {
+        if (comment.commentNo === targetNo) {
+          return comment
+        }
+        if (comment.replies && comment.replies.length > 0) {
+          const found = findComment(comment.replies, targetNo)
+          if (found) return found
+        }
+      }
+      return null
     }
 
-    return (
-      <div style={{ marginLeft: '20px' }}>
-        {replies.map((reply) => (
-          <div key={reply.id} style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <img
-                src={reply.profileImage}
-                style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }}
-              />
-              <span>{NowTime(reply.date)}</span>
-              <Viewer initialValue={reply.content} />
-              <Button onClick={() => handleReply(reply.id)}>
-                {replyStates[reply.id] ? '답글 취소' : '답글 달기'}
-              </Button>
-              {replyStates[reply.id] && (
-                <CommentReply
-                  onSubmit={(newReply) => addReply(parentId, newReply, reply.id)}
-                  currentUserId={currentUserId}
-                />
-              )}
-            </div>
-            {reply.replies.length > 0 && <Replies replies={reply.replies} parentId={reply.id} />}
-          </div>
-        ))}
-      </div>
-    )
+    const parentComment = findComment(comments, motherNo)
+
+    if (!parentComment) {
+      console.error('Parent comment not found')
+      return
+    }
+
+    const newComment = {
+      user_no: currentUserNo,
+      comment_content: text,
+      comment_mother: motherNo,
+      comment_depth: parentComment.commentDepth + 1,
+      post_no: 4, // 예시로 설정
+    }
+
+    try {
+      const createdComment = await createComment(newComment)
+
+      // 재귀적으로 댓글 트리를 업데이트하는 함수
+      const updateCommentTree = (comments) => {
+        return comments.map((comment) => {
+          if (comment.commentNo === motherNo) {
+            return {
+              ...comment,
+              replies: [...(comment.replies || []), createdComment],
+            }
+          }
+          if (comment.replies && comment.replies.length > 0) {
+            return {
+              ...comment,
+              replies: updateCommentTree(comment.replies),
+            }
+          }
+          return comment
+        })
+      }
+
+      setComments((prevComments) => updateCommentTree(prevComments))
+    } catch (error) {
+      console.error('Error adding reply:', error)
+    }
   }
 
   return (
     <div>
       <h1>댓글 목록</h1>
       {comments.map((comment) => (
-        <div key={comment.id} style={{ marginBottom: '30px' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img
-              src={comment.profileImage}
-              style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '20px' }}
-            />
-            {NowTime(comment.date)}
-          </div>
-          <Viewer initialValue={comment.content} />
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <CommentLike like={comment.likes} />
-            {comment.userId === currentUserId && (
-              <Button onClick={() => deleteComment(comment.id)}>삭제</Button>
-            )}
-            <Button onClick={() => handleReply(comment.id)}>
-              {replyStates[comment.id] ? '답글 취소' : '답글 달기'}
-            </Button>
-          </div>
-
-          {replyStates[comment.id] && (
-            <CommentReply
-              onSubmit={(newReply) => addReply(comment.id, newReply)}
-              currentUserId={currentUserId}
-            />
-          )}
-
-          <div style={{ margin: '30px' }}>
-            {comment.replies.map((reply) => (
-              <div key={reply.id}>
-                <img
-                  src={reply.profileImage}
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '50%',
-                    marginRight: '10px',
-                  }}
-                />
-                <span>{NowTime(reply.date)}</span>
-                <Viewer initialValue={reply.content} />
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <CommentLike like={reply.likes} />
-                  {reply.userId === currentUserId && (
-                    <Button onClick={() => deleteReply(comment.id, reply.id)}>삭제</Button>
-                  )}
-                  <Button onClick={() => handleReply(reply.id)}>
-                    {replyStates[reply.id] ? '답글 취소' : '답글 달기'}
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <CommentItem
+          key={comment.commentNo}
+          comment={comment}
+          addReply={addReply}
+          deleteComment={deleteComment}
+          currentUserNo={currentUserNo}
+          updateComment={updateComment}
+          voteComment={voteComment}
+        />
       ))}
     </div>
   )

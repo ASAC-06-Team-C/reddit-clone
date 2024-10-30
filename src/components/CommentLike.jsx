@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 
-function CommentLike({ like }) {
+function CommentLike({ like, voteComment, commentNo }) {
   const [likes, setLikes] = useState(like)
   const [likeState, setLikeState] = useState(false)
   const [hateState, setHateState] = useState(false)
@@ -10,10 +10,12 @@ function CommentLike({ like }) {
     if (likeState) {
       setLikes(likes - 1)
       setLikeState(false)
+      // voteComment({ comment_no: commentNo, user_no: 1 /*임시 사용자 번호*/, vote_type: 'remove' })
     } else {
       setLikes(likes + (hateState ? 2 : 1))
       setLikeState(true)
       setHateState(false)
+      voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: true })
     }
   }
 
@@ -25,6 +27,7 @@ function CommentLike({ like }) {
       setLikes(likes - (likeState ? 2 : 1))
       setHateState(true)
       setLikeState(false)
+      voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: false })
     }
   }
 
