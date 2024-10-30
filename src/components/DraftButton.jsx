@@ -17,7 +17,7 @@ const dummy2 = {
   post_write_date: String(new Date()),
 }
 
-export default function DraftButton() {
+export default function DraftButton({ draft, setDraft }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -32,6 +32,9 @@ export default function DraftButton() {
         <div className='grid gap-4 py-4'>
           <DraftCard content={dummy1}></DraftCard>
           <DraftCard content={dummy2}></DraftCard>
+          {draft.map((item, key) => (
+            <DraftCard content={item} key={key} />
+          ))}
         </div>
       </DialogContent>
     </Dialog>

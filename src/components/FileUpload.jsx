@@ -17,17 +17,31 @@ function UploadFile() {
       post_content: uploadRef?.current?.value,
       post_draft: isDraft,
     }
-    console.log(titleRef?.current?.value)
-    const response = await fetch('http://localhost:8080/posts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify(requestObject),
-    })
 
-    const data = await response.json()
-    console.log(data)
+    if (isDraft) {
+      const response = await fetch('http://localhost:8080/drafts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify(requestObject),
+      })
+
+      const data = await response.json()
+      console.log(data)
+    } else {
+      const response = await fetch('http://localhost:8080/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify(requestObject),
+      })
+
+      const data = await response.json()
+      console.log(data)
+    }
+
     // 추후 toast 추가
   }
   return (

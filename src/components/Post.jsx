@@ -30,16 +30,25 @@ function ChangeTypeLink({ linkTo, buttonName }) {
   )
 }
 
-function Post() {
-  const [draft, setDraft] = useState({})
+async function getDrafts() {
+  const dummyUserNo = 0
+  const request = await fetch(`http://localhost:8080/drafts/?user_no=${dummyUserNo}`)
+  const response = request.json()
+  return response
+}
 
-  useEffect(() => {}, [draft])
+function Post() {
+  const [draft, setDraft] = useState([])
+
+  useEffect(() => {
+    getDrafts().then((response) => setDraft(response))
+  }, [])
   return (
     <>
       <div style={{ marginLeft: '32px', width: '60%' }}>
         <div className='flex items-center justify-between'>
           <h1>Create post</h1>
-          <DraftButton />
+          <DraftButton draft={draft} setDraft={setDraft} />
         </div>
 
         <div style={{ height: '60px' }}>
