@@ -1,9 +1,10 @@
+import BoardListitem from '@/components/BoardListItem'
 import RedditMainSelectItem from '@/components/RedditMainSelectItem'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useEffect, useRef, useState } from 'react'
 
 let options = {
-  root: document.querySelector('scroll-area'), // 대상 객체의 가기성 확인.
+  root: document.querySelector('scroll-area'), // 대상 객체의 가시성 확인.
   rootMargin: '0px', // root 요소의 범위를 확장할 수 있음.
   threshold: 1.0, // 콜백 실행될 타겟 요소의 가시성 퍼센티지를 나타냄. 어느정도 보여졌는 지에 따라 콜백 호출이 가능.
 }
@@ -24,18 +25,21 @@ export default function CustomIntersectionObsever() {
 
     // 응답 데이터를 JSON 형식으로 파싱합니다.
     const data = await response.json()
-    console.log(`111111 ----- ${data.length}`)
+    // REST API::
+    const statusCode = response.status
 
-    // 만약 더 이상 불러올 상품이 없다면 hasMore 상태를 false로 설정합니다.
-    if (data.length === 0) {
-      setHasMore(false)
-    } else {
+    if (statusCode == 200) {
+      // 성공 코드 반환시,
       // 불러온 데이터를 현재 상품 목록에 추가합니다.
       // 이전 상품 목록(prevProducts)에 새로운 데이터(data.products)를 연결합니다.
       setProducts((prevProducts) => [...prevProducts, ...data])
 
       // 페이지 번호를 업데이트하여 다음 요청에 올바른 skip 값을 사용합니다.
       pageRef.current += 1
+    } else {
+      // 실패 코드 반환시,
+      // 만약 더 이상 불러올 상품이 없다면 hasMore 상태를 false로 설정합니다.
+      setHasMore(false)
     }
   }
 
@@ -67,27 +71,30 @@ export default function CustomIntersectionObsever() {
 
   return (
     <>
-      <ScrollArea id='scroll-area'>
-        <RedditMainSelectItem />
-        {products.map((item, index) => (
-          <span key={index} style={{ width: '100%', margin: '0 auto' }} className={'mb-2'}>
-            {item.user_no} <br />
+      <div style={{ width: '100%', margin: '0 auto' }}>
+        <ScrollArea id='scroll-area'>
+          <RedditMainSelectItem />
+          {products.map((item, index) => (
+            <span key={index} style={{ width: '100%', margin: '0 auto' }} className={'mb-2'}>
+              <BoardListitem className='' props={item} />
+              {/* {item.user_no} <br />
             {item.post_no} <br />
             {item.community_name} <br />
             {item.post_title} <br />
             {item.post_content} <br />
             {item.post_vote_count} <br />
             {item.post_comment_count} <br />
-            {item.post_write_date} <br />
-            <br />
-          </span>
-        ))}
-        {hasMore && (
-          <div ref={elementRef} style={{ textAlign: 'center' }}>
-            Load More Items
-          </div>
-        )}
-      </ScrollArea>
+            {item.post_write_date} <br /> */}
+              <br />
+            </span>
+          ))}
+          {hasMore && (
+            <div ref={elementRef} style={{ textAlign: 'center' }}>
+              Load More Items
+            </div>
+          )}
+        </ScrollArea>
+      </div>
     </>
   )
 }
