@@ -1,14 +1,38 @@
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Editor } from '@toast-ui/react-editor'
-import { Button } from '@/components/ui/button'
 import { useRef } from 'react'
 import ValidButton from '@/components/ValidButton'
 import InputTitle from '@/components/InputTitle'
+import { useParams } from 'react-router-dom'
+import { CreatedContext } from '@/components/Post'
 
 function TextEditor() {
   const [isValid, setIsValid] = useState(true)
   const titleRef = useRef(null)
   const textRef = useRef(null)
+
+  const [content, setContent] = useState('')
+  const { title, setTitle } = useContext(CreatedContext)
+  const postNumberParam = useParams()
+
+  useEffect(() => {
+    console.log(postNumberParam)
+    if (postNumberParam?.post_no) {
+      fetch(`http://localhost:8080/drafts/${postNumberParam.post_no}`)
+        .then((res) => res.json())
+        .then((draft) => {
+          console.log(draft)
+          setTitle(draft.post_title)
+          setContent(() => draft.post_content)
+        })
+    }
+  }, [postNumberParam])
+
+  useEffect(() => {
+    if (textRef.current) {
+      textRef.current.getInstance().setMarkdown(content || '')
+    }
+  }, [content])
 
   async function request(isDraft) {
     //user_no의 경우 추후 수정해야 합니다.
@@ -48,9 +72,9 @@ function TextEditor() {
 
   return (
     <>
-      <InputTitle reference={titleRef} isValid={isValid} setIsValid={setIsValid} />
+      <InputTitle value={title} reference={titleRef} isValid={isValid} setIsValid={setIsValid} />
       <Editor
-        initialValue=' '
+        initialValue={content}
         previewStyle='vertical'
         height='200px'
         initialEditType='wysiwyg'

@@ -8,15 +8,6 @@ import {
 import { Button } from '@/components/ui/button'
 import DraftCard from '@/components/DraftCard'
 
-const dummy1 = {
-  post_title: 'test1',
-  post_write_date: String(new Date()),
-}
-const dummy2 = {
-  post_title: 'test2',
-  post_write_date: String(new Date()),
-}
-
 export default function DraftButton({ draft, setDraft }) {
   return (
     <Dialog>
@@ -30,10 +21,8 @@ export default function DraftButton({ draft, setDraft }) {
           <DialogTitle>Drafts</DialogTitle>
         </DialogHeader>
         <div className='grid gap-4 py-4'>
-          <DraftCard content={dummy1}></DraftCard>
-          <DraftCard content={dummy2}></DraftCard>
           {draft.map((item, key) => (
-            <DraftCard content={item} key={key} />
+            <DraftCard content={item} key={key} index={key} draft={draft} setDraft={setDraft} />
           ))}
         </div>
       </DialogContent>

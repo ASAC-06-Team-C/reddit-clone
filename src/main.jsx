@@ -39,6 +39,24 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: 'post/:post_no',
+        element: <PostPage />,
+        children: [
+          {
+            index: true,
+            element: <TextEditor />,
+          },
+          {
+            path: 'image',
+            element: <UploadFile />,
+          },
+          {
+            path: 'link',
+            element: <LinkUpload />,
+          },
+        ],
+      },
+      {
         path: 'detail',
         element: <BoardDetailPage />,
       },

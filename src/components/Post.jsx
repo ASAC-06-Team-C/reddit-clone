@@ -41,8 +41,10 @@ function Post() {
   const [draft, setDraft] = useState([])
 
   useEffect(() => {
-    getDrafts().then((response) => setDraft(response))
-  }, [])
+    getDrafts().then((response) => {
+      setDraft(() => response)
+    })
+  }, [draft])
   return (
     <>
       <div style={{ marginLeft: '32px', width: '60%' }}>
