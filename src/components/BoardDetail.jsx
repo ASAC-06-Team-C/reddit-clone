@@ -88,27 +88,32 @@ function copyClipboard(copyText) {
     .catch((err) => console.log('Copy 실패 : ', err))
 }
 
-function BoardDetail() {
+function BoardDetail({ className = null, props = null }) {
   const url = 'http://localhost:8080/posts/'
-  const params = useParams()
-  const fullUrl = url + params
+  const { id } = useParams()
+  const postNo = props ? props.post_no : id
+  const fullUrl = url + postNo
 
   const [loading, setLoading] = useState(true)
-  const [content, setContent] = useState(null)
+  const [content, setContent] = useState(props)
   const [diffDate, setDiffDate] = useState(null)
   const [isVoted, setIsVoted] = useState('NONE')
 
   useEffect(() => {
-    console.log('useEffect')
-    fetch(fullUrl, {
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setContent(data)
+    if (!props)
+      fetch(fullUrl, {
+        method: 'GET',
       })
-      .catch((err) => console.log('Error : ', err))
-      .finally(() => setLoading(false))
+        .then((response) => response.json())
+        .then((data) => {
+          setContent(data)
+        })
+        .catch((err) => console.log('Error : ', err))
+        .finally(() => setLoading(false))
+    else {
+      setContent(props)
+      setLoading(false)
+    }
   }, [])
 
   useEffect(() => {
@@ -133,7 +138,7 @@ function BoardDetail() {
   } else {
     return (
       <>
-        <Card className='w-full'>
+        <Card className={'w-full ' + className}>
           <CardHeader>
             <div className='flex justify-between'>
               <div className='flex items-center gap-2'>
@@ -172,7 +177,7 @@ function BoardDetail() {
                 isVoted={isVoted}
                 postVoteCount={content.post_vote_count}
                 url={url}
-                postNo={params.id}
+                postNo={postNo}
                 userNo={content.author.user_no}
               />
               <IconTextButton
