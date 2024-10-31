@@ -1,6 +1,6 @@
 export const calculator = (pastTime) => {
-  const past = new Date(pastTime).getMilliseconds()
-  const now = new Date().getMilliseconds()
+  const past = new Date(pastTime)
+  const now = new Date()
   const timeDivideSet = [
     {
       divide: 1000,
