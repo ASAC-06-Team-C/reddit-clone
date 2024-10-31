@@ -24,6 +24,63 @@ import IconButton from '@/components/IconButton'
 import IconTextButton from '@/components/IconTextButton'
 import { useParams } from 'react-router-dom'
 
+function BoardVoteComponent({ isVoted, postVoteCount, url, postNo, userNo }) {
+  // isVoted에 따른 컴포넌트 속성
+  // isVoted : NONE/LIKE/UNLIKE 중 하나
+  const { upvote, downvote } =
+    {
+      NONE: {
+        upvote: { variant: 'ghost', iconSrc: '/img/up-arrow.svg', vote: 'LIKE' },
+        downvote: { variant: 'ghost', iconSrc: '/img/up-arrow-svgrepo-com.svg', vote: 'UNLIKE' },
+      },
+      LIKE: {
+        upvote: { variant: 'destructive', iconSrc: '/img/up-arrow.svg', vote: 'NONE' },
+        downvote: { variant: 'ghost', iconSrc: '/img/up-arrow-svgrepo-com.svg', vote: 'UNLIKE' },
+      },
+      UNLIKE: {
+        upvote: { variant: 'ghost', iconSrc: '/img/up-arrow.svg', vote: 'LIKE' },
+        downvote: {
+          variant: 'destructive',
+          iconSrc: '/img/up-arrow-svgrepo-com.svg',
+          vote: 'NONE',
+        },
+      },
+      // isVoted에 따라 map 정보 반환, 올바른 isVoted가 없으면 빈 객체 반환
+    }[isVoted] || {}
+
+  const renderIconButton = (button) => (
+    <IconButton
+      variant={button.variant}
+      iconSrc={button.iconSrc}
+      onClickEvent={onClickVote(url, postNo, userNo, button.vote)}
+    />
+  )
+
+  return (
+    <div className='rounded-full bg-gray-200'>
+      {upvote && renderIconButton(upvote)}
+      {postVoteCount}
+      {downvote && renderIconButton(downvote)}
+    </div>
+  )
+}
+
+async function onClickVote(url, postNo, userNo, postVoteType) {
+  return fetch(url + 'vote', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      post_no: postNo,
+      user_no: userNo,
+      post_vote_type: postVoteType,
+    }),
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err))
+}
+
 function BoardDetail() {
   const url = 'http://localhost:8080/posts/'
   const params = useParams()
@@ -31,6 +88,7 @@ function BoardDetail() {
   const [loading, setLoading] = useState(true)
   const [content, setContent] = useState(null)
   const [diffDate, setDiffDate] = useState(null)
+  const [isVoted, setIsVoted] = useState('NONE')
 
   useEffect(() => {
     console.log('useEffect')
@@ -54,6 +112,7 @@ function BoardDetail() {
             100,
         ) / 100,
       )
+      setIsVoted(content.is_voted)
     }
   }, [content])
 
@@ -74,7 +133,7 @@ function BoardDetail() {
                   <AvatarImage src={'/img/blank-profile-picture-973460_960_720.webp'} />
                   <AvatarFallback>KOR</AvatarFallback>
                 </Avatar>
-                {/* <div>{content.author.user_no}</div> */}
+                <div>{content.author.user_nickname}</div>
                 <div>•</div>
                 <div>{diffDate}일 전</div>
               </div>
@@ -101,15 +160,13 @@ function BoardDetail() {
           </CardContent>
           <CardFooter>
             <div className='flex gap-2'>
-              <div className='rounded-full bg-gray-200'>
-                <IconButton variant='ghost' iconSrc={'/img/up-arrow.svg'} onClickEvent={() => {}} />
-                {content.post_vote_count}
-                <IconButton
-                  variant='ghost'
-                  iconSrc={'/img/up-arrow-svgrepo-com.svg'}
-                  onClickEvent={() => {}}
-                />
-              </div>
+              <BoardVoteComponent
+                isVoted={isVoted}
+                postVoteCount={content.post_vote_count}
+                url={url}
+                postNo={params.id}
+                userNo={content.author.user_no}
+              />
               <IconTextButton
                 variant='secondary'
                 iconSrc={'/img/306434.svg'}
