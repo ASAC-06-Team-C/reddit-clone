@@ -1,5 +1,5 @@
 import { marked } from 'marked'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from './ui/button'
 import {
@@ -22,21 +22,47 @@ import {
 
 import IconButton from '@/components/IconButton'
 import IconTextButton from '@/components/IconTextButton'
-
-function MDviewer({ markdown, setMarkdown }) {
-  return (
-    <div className='flex'>
-      <div>
-        <textarea onChange={(e) => setMarkdown(e.currentTarget.value)} />
-      </div>
-      <div dangerouslySetInnerHTML={{ __html: marked.parse(markdown) }} className='prose'></div>
-    </div>
-  )
-}
+import { useParams } from 'react-router-dom'
 
 function BoardDetail() {
-  const [markdown, setMarkdown] = useState('')
+  console.log('render')
+  const url = 'http://localhost:8080/posts/'
+  const params = useParams()
 
+  const [loading, setLoading] = useState(true)
+  const [content, setContent] = useState(null)
+  const [diffDate, setDiffDate] = useState(null)
+
+  useEffect(() => {
+    console.log('useEffect')
+    fetch(url + params.id, {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setContent(data)
+      })
+      .catch((err) => console.log('Error : ', err))
+      .finally(() => setLoading(false))
+  }, [])
+
+  useEffect(() => {
+    console.log('setDate')
+    if (content) {
+      setDiffDate(
+        (new Date().getTime() - new Date(content.post_write_date).getTime()) /
+          (24 * 60 * 60 * 1000),
+      )
+    }
+  }, [content])
+
+  // if (loading) {
+  //   return (
+  //     <div>
+  //       <h1>로딩중입니다.</h1>
+  //     </div>
+  //   )
+  // } else {
   return (
     <>
       <Card className='w-full'>
@@ -47,14 +73,14 @@ function BoardDetail() {
                 <AvatarImage src={'img/blank-profile-picture-973460_960_720.webp'} />
                 <AvatarFallback>KOR</AvatarFallback>
               </Avatar>
-              <div>강석훈</div>
+              {/* <div>{content.author.user_no}</div> */}
               <div>•</div>
-              <div>14 days ago</div>
+              <div>{diffDate}일 전</div>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button size='icon' variant='ghost'>
-                  <img src={'img/three-dots.svg'} className='h-4 w-4'></img>
+                  <img src={'/img/three-dots.svg'} className='h-4 w-4'></img>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -65,21 +91,36 @@ function BoardDetail() {
             </DropdownMenu>
           </div>
         </CardHeader>
-        <CardContent></CardContent>
+        <CardContent>
+          <div>{content.post_title}</div>
+          <div
+            dangerouslySetInnerHTML={{ __html: marked.parse(content.post_content) }}
+            className='prose'
+          ></div>
+        </CardContent>
         <CardFooter>
           <div className='flex gap-2'>
             <div className='rounded-full bg-gray-200'>
-              <IconButton variant='ghost' iconSrc={'img/up-arrow.svg'} />
-              0
-              <IconButton variant='ghost' iconSrc={'img/up-arrow-svgrepo-com.svg'} />
+              <IconButton variant='ghost' iconSrc={'/img/up-arrow.svg'} onClickEvent={() => {}} />
+              {content.post_vote_count}
+              <IconButton
+                variant='ghost'
+                iconSrc={'/img/up-arrow-svgrepo-com.svg'}
+                onClickEvent={() => {}}
+              />
             </div>
-            <IconTextButton variant='secondary' iconSrc={'img/306434.svg'} text='0' />
-            <IconTextButton variant='secondary' iconSrc={'img/share-arrows.svg'} text='Share' />
+            <IconTextButton
+              variant='secondary'
+              iconSrc={'/img/306434.svg'}
+              text={content.post_comment_count}
+            />
+            <IconTextButton variant='secondary' iconSrc={'/img/share-arrows.svg'} text='Share' />
           </div>
         </CardFooter>
       </Card>
     </>
   )
 }
+// }
 
 export default BoardDetail
