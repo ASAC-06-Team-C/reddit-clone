@@ -81,9 +81,17 @@ async function onClickVote(url, postNo, userNo, postVoteType) {
     .catch((err) => console.log(err))
 }
 
+function copyClipboard(copyText) {
+  navigator.clipboard
+    .writeText(copyText)
+    .then(() => console.log('Copy 완료 : ', copyText))
+    .catch((err) => console.log('Copy 실패 : ', err))
+}
+
 function BoardDetail() {
   const url = 'http://localhost:8080/posts/'
   const params = useParams()
+  const fullUrl = url + params
 
   const [loading, setLoading] = useState(true)
   const [content, setContent] = useState(null)
@@ -92,7 +100,7 @@ function BoardDetail() {
 
   useEffect(() => {
     console.log('useEffect')
-    fetch(url + params.id, {
+    fetch(fullUrl, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -172,7 +180,12 @@ function BoardDetail() {
                 iconSrc={'/img/306434.svg'}
                 text={content.post_comment_count}
               />
-              <IconTextButton variant='secondary' iconSrc={'/img/share-arrows.svg'} text='Share' />
+              <IconTextButton
+                variant='secondary'
+                iconSrc={'/img/share-arrows.svg'}
+                text='Share'
+                onClick={copyClipboard(fullUrl)}
+              />
             </div>
           </CardFooter>
         </Card>
