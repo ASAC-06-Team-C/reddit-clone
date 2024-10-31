@@ -21,7 +21,6 @@ function TextEditor() {
       fetch(`http://localhost:8080/drafts/${postNumberParam.post_no}`)
         .then((res) => res.json())
         .then((draft) => {
-          console.log(draft)
           setTitle(draft.post_title)
           setContent(() => draft.post_content)
         })
@@ -36,39 +35,33 @@ function TextEditor() {
 
   async function request(isDraft) {
     //user_no의 경우 추후 수정해야 합니다.
-    const requestObject = {
-      user_no: 0,
-      post_title: titleRef?.current?.value,
-      post_content: textRef?.current.getInstance().getMarkdown(),
-      post_draft: isDraft,
-    }
-    if (isDraft) {
-      const response = await fetch('http://localhost:8080/drafts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-        },
-        body: JSON.stringify(requestObject),
-      })
-      const data = await response.json()
-      console.log(data)
-    } else {
-      const response = await fetch('http://localhost:8080/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-        },
-        body: JSON.stringify(requestObject),
-      })
-      const data = await response.json()
-      console.log(data)
-    }
+    const requestObject = postNumberParam?.post_no
+      ? {
+          post_no: postNumberParam?.post_no,
+          user_no: 0,
+          post_title: titleRef?.current?.value,
+          post_content: textRef?.current.getInstance().getMarkdown(),
+          post_draft: isDraft,
+        }
+      : {
+          user_no: 0,
+          post_title: titleRef?.current?.value,
+          post_content: textRef?.current.getInstance().getMarkdown(),
+          post_draft: isDraft,
+        }
+    console.log(requestObject)
+    const response = await fetch(`http://localhost:8080/${isDraft ? 'drafts' : 'posts'}`, {
+      method: postNumberParam?.post_no ? 'PUT' : 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(requestObject),
+    })
+    const data = await response.json()
+    console.log(data) // 데이터를 받았을 경우 이것을 사용해 detail post 페이지로 route
 
     // 추후 toast 추가
   }
-
-  // 만약 그냥 HTML 형식 받아오고 싶으면 getHTML
-  // 자세한건 https://nhn.github.io/tui.editor/latest/ToastUIEditor
 
   return (
     <>
@@ -77,16 +70,17 @@ function TextEditor() {
         initialValue={content}
         previewStyle='vertical'
         height='200px'
+        minHeight='200px'
         initialEditType='wysiwyg'
         useCommandShortcut={false}
         placeholder='Body'
         ref={textRef}
       />
       <div className='flex justify-end mt-4 gap-4'>
-        <ValidButton eventFunction={() => request(false)} isValid={isValid}>
+        <ValidButton eventFunction={() => request(true)} isValid={isValid} className=''>
           Save Draft
         </ValidButton>
-        <ValidButton eventFunction={() => request(true)} isValid={isValid}>
+        <ValidButton eventFunction={() => request(false)} isValid={isValid}>
           Post
         </ValidButton>
       </div>

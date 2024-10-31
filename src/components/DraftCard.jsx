@@ -20,20 +20,20 @@ export default function DraftCard({ content, index, draft, setDraft }) {
     }).then(() => {
       console.log(draft)
       draft.splice(index, 1)
+      setDraft(() => draft)
     })
-    setDraft(draft)
   }
 
   return (
-    <Card variant='ghost' className='w-96 rounded-[8px] h-16 hover:bg-gray-100'>
+    <Card className='w-96 rounded-[8px] h-16 hover:bg-gray-100'>
       <div className='flex'>
         <div>
           <p className='font-bold'>{content.post_title}</p>
           <p className='text-xs text-gray-500'>{content.post_write_date}</p>
         </div>
-        <Link to={`${content.post_no}`}>
+        <Link to={`/post/${content.post_no}`}>
           <DialogClose>
-            <Button variant='ghost' size='icon' className='hover:bg-gray-300' onClick={() => {}}>
+            <Button variant='ghost' size='icon' className='hover:bg-gray-300'>
               <img src={editImage}></img>
             </Button>
           </DialogClose>

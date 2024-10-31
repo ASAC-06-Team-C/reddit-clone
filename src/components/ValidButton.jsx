@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 
-export default function ValidButton({ children, eventFunction, isValid }) {
+export default function ValidButton({ children, eventFunction, isValid, className }) {
   if (isValid) {
     return (
       <>

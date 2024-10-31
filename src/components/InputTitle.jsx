@@ -1,9 +1,9 @@
 import { CreatedContext } from '@/components/Post'
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { Input } from '@/components/ui/input'
 import '@/index.css'
 
-function InputTitle({ value, reference, isValid, setIsValid }) {
+function InputTitle({ reference, isValid, setIsValid }) {
   const { title, setTitle } = useContext(CreatedContext)
 
   useEffect(() => {
