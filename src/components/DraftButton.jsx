@@ -20,7 +20,7 @@ export default function DraftButton({ draft, setDraft }) {
         <DialogHeader>
           <DialogTitle>Drafts</DialogTitle>
         </DialogHeader>
-        <div className='grid gap-4 py-4'>
+        <div className='flex-cols gap-4 py-4 justify-center'>
           {draft.map((item, key) => (
             <DraftCard content={item} key={key} index={key} draft={draft} setDraft={setDraft} />
           ))}

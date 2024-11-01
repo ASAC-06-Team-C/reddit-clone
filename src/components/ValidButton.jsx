@@ -4,7 +4,7 @@ export default function ValidButton({ children, eventFunction, isValid, classNam
   if (isValid) {
     return (
       <>
-        <Button size='sm' className='font-semibold' onClick={(e) => eventFunction()}>
+        <Button size='sm' className='font-semibold' onClick={() => eventFunction()}>
           {children}
         </Button>
       </>

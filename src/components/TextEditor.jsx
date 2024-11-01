@@ -5,15 +5,16 @@ import ValidButton from '@/components/ValidButton'
 import InputTitle from '@/components/InputTitle'
 import { useParams } from 'react-router-dom'
 import { CreatedContext } from '@/components/Post'
+import { useToast } from '@/hooks/use-toast'
 
 function TextEditor() {
   const [isValid, setIsValid] = useState(true)
   const titleRef = useRef(null)
   const textRef = useRef(null)
-
   const [content, setContent] = useState('')
   const { title, setTitle } = useContext(CreatedContext)
   const postNumberParam = useParams()
+  const { toast } = useToast()
 
   useEffect(() => {
     console.log(postNumberParam)
@@ -50,15 +51,40 @@ function TextEditor() {
           post_draft: isDraft,
         }
     console.log(requestObject)
-    const response = await fetch(`http://localhost:8080/${isDraft ? 'drafts' : 'posts'}`, {
+    await fetch(`http://localhost:8080/${isDraft ? 'drafts' : 'posts'}`, {
       method: postNumberParam?.post_no ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
       },
       body: JSON.stringify(requestObject),
     })
-    const data = await response.json()
-    console.log(data) // 데이터를 받았을 경우 이것을 사용해 detail post 페이지로 route
+      .then((res) => {
+        if (res.status >= 300) {
+          toast({
+            variant: 'destructive',
+            title: 'Error!',
+            description: '요청이 전달되지 않았습니다. 잠시 후 다시 시도해주세요.',
+          })
+        } else if (isDraft) {
+          toast({
+            title: '성공!',
+            description: 'Draft가 업데이트 됩니다.',
+          })
+        } else {
+          toast({
+            title: '성공!',
+            description: '잠시 후 작성된 글로 이동합니다.',
+          })
+        }
+      })
+      .catch(() => {
+        toast({
+          variant: 'destructive',
+          title: 'Internal Server Error',
+        })
+      })
+
+    // 데이터를 받았을 경우 이것을 사용해 detail post 페이지로 route
 
     // 추후 toast 추가
   }
@@ -77,8 +103,8 @@ function TextEditor() {
         ref={textRef}
       />
       <div className='flex justify-end mt-4 gap-4'>
-        <ValidButton eventFunction={() => request(true)} isValid={isValid} className=''>
-          Save Draft
+        <ValidButton eventFunction={() => request(true)} isValid={isValid}>
+          {postNumberParam?.post_no ? 'Change Draft' : 'Save Draft'}
         </ValidButton>
         <ValidButton eventFunction={() => request(false)} isValid={isValid}>
           Post

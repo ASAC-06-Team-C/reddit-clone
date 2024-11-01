@@ -1,10 +1,11 @@
 import { Post } from '@/components/Post'
-import { useParams } from 'react-router-dom'
+import { Toaster } from '@/components/ui/toaster'
 
 function PostPage() {
   return (
     <>
       <Post />
+      <Toaster />
     </>
   )
 }

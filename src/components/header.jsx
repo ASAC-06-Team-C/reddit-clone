@@ -13,7 +13,7 @@ import DialogButton from '@/components/DialogButton'
 function Header() {
   return (
     <>
-      <div className='h-[56px] flex items-center justify-between'>
+      <div className='h-[56px] flex items-center justify-between sticky top-0'>
         <div className='flex'>
           <div className='min-w-[264px]'>
             <TooltipComponent message={'Go to Reddit Home'}>
