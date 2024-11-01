@@ -24,7 +24,7 @@ import IconButton from '@/components/IconButton'
 import IconTextButton from '@/components/IconTextButton'
 import { useParams } from 'react-router-dom'
 
-function BoardVoteComponent({ isVoted, postVoteCount, url, postNo, userNo }) {
+function BoardVoteComponent({ isVoted, postVoteCount, url, postNo, userNo, setIsVoted }) {
   // isVoted에 따른 컴포넌트 속성
   // isVoted : NONE/LIKE/UNLIKE 중 하나
   const { upvote, downvote } =
@@ -52,7 +52,7 @@ function BoardVoteComponent({ isVoted, postVoteCount, url, postNo, userNo }) {
     <IconButton
       variant={button.variant}
       iconSrc={button.iconSrc}
-      onClickEvent={onClickVote(url, postNo, userNo, button.vote)}
+      onClickEvent={onClickVote(url, postNo, userNo, button.vote, setIsVoted)}
     />
   )
 
@@ -65,7 +65,8 @@ function BoardVoteComponent({ isVoted, postVoteCount, url, postNo, userNo }) {
   )
 }
 
-async function onClickVote(url, postNo, userNo, postVoteType) {
+async function onClickVote(url, postNo, userNo, postVoteType, setIsVoted) {
+  setIsVoted(postVoteType)
   return fetch(url + 'vote', {
     method: 'POST',
     headers: {
@@ -179,6 +180,7 @@ function BoardDetail({ className = null, props = null }) {
                 url={url}
                 postNo={postNo}
                 userNo={content.author.user_no}
+                setIsVoted={setIsVoted}
               />
               <IconTextButton
                 variant='secondary'
