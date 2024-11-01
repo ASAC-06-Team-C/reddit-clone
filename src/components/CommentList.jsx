@@ -148,7 +148,7 @@ function CommentList({
       const responseComment = (await response.json()).map(toCamelCase)
       setComments(commentTree(responseComment))
     } catch (error) {
-      console.error('댓글을 불러오는 중 오류 발생:', error)
+      console.error('Error getComment: ', error)
     }
   }
 
@@ -194,7 +194,6 @@ function CommentList({
     const parentComment = findComment(comments, motherNo)
 
     if (!parentComment) {
-      console.error('Parent comment not found')
       return
     }
 
@@ -230,7 +229,7 @@ function CommentList({
 
       setComments((prevComments) => updateCommentTree(prevComments))
     } catch (error) {
-      console.error('Error adding reply:', error)
+      console.error('Error reply:', error)
     }
   }
 

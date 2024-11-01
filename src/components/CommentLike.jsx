@@ -12,10 +12,15 @@ function CommentLike({ like, voteComment, commentNo }) {
       setLikeState(false)
       // voteComment({ comment_no: commentNo, user_no: 1 /*임시 사용자 번호*/, vote_type: 'remove' })
     } else {
-      setLikes(likes + (hateState ? 2 : 1))
+      if (hateState) {
+        voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'uptodown' })  
+        setLikes(likes + 2)
+      } else {
+        voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'up' }) 
+        setLikes(likes + 1)
+      }
       setLikeState(true)
       setHateState(false)
-      voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: true })
     }
   }
 
@@ -27,7 +32,7 @@ function CommentLike({ like, voteComment, commentNo }) {
       setLikes(likes - (likeState ? 2 : 1))
       setHateState(true)
       setLikeState(false)
-      voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: false })
+      voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'down' })
     }
   }
 

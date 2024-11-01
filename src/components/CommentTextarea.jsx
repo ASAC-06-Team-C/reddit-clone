@@ -3,13 +3,13 @@ import { Button } from '@/components/ui/button'
 import { useRef } from 'react'
 
 function CommentTextarea({
+  currentUserNo,
+  inputValue,
+  setInputValue,
   setTextOptionState,
   setInputState,
   createComment,
-  inputValue,
-  setInputValue,
   setComments,
-  currentUserNo,
 }) {
   const commentRef = useRef(null)
 

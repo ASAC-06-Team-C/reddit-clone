@@ -138,7 +138,7 @@ function Comment() {
     setInputValue,
     setInputState,
     createComment,
-    comments,
+    setTextOptionState,
     setComments,
   }
 
@@ -148,9 +148,9 @@ function Comment() {
         inputState ? (
           <CommentInput setInputState={setInputState} />
         ) : textOptionState ? (
-          <CommentTextarea {...commonProps} setTextOptionState={setTextOptionState} />
+          <CommentTextarea {...commonProps} />
         ) : (
-          <CommentMarkdown {...commonProps} setTextOptionState={setTextOptionState} />
+          <CommentMarkdown {...commonProps} />
         )
       ) : null}
       <br />
