@@ -75,6 +75,12 @@ function TextEditor() {
             title: '성공!',
             description: '잠시 후 작성된 글로 이동합니다.',
           })
+          res.json().then((response) => {
+            setTimeout(function () {
+              console.log(`http://localhost:5173/posts/${response.post_no}`)
+              // window.location.href = `http://localhost:5173/posts/${response.post_no}`
+            }, 2000)
+          })
         }
       })
       .catch(() => {
