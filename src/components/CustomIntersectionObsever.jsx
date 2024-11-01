@@ -1,4 +1,5 @@
-import BoardListitem from '@/components/BoardListItem'
+import BoardDetail from '@/components/BoardDetail'
+import BoardListItem from '@/components/BoardListItem'
 import RedditMainSelectItem from '@/components/RedditMainSelectItem'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useEffect, useRef, useState } from 'react'
@@ -72,19 +73,11 @@ export default function CustomIntersectionObsever() {
   return (
     <>
       <div style={{ width: '100%', margin: '0 auto' }}>
-        <ScrollArea id='scroll-area'>
+        <ScrollArea id='scroll-area' className=''>
           <RedditMainSelectItem />
           {products.map((item, index) => (
             <span key={index} style={{ width: '100%', margin: '0 auto' }} className={'mb-2'}>
-              <BoardListitem className='' props={item} />
-              {/* {item.user_no} <br />
-            {item.post_no} <br />
-            {item.community_name} <br />
-            {item.post_title} <br />
-            {item.post_content} <br />
-            {item.post_vote_count} <br />
-            {item.post_comment_count} <br />
-            {item.post_write_date} <br /> */}
+              <BoardDetail className='w-[60%] ml-[20%]' props={item} />
               <br />
             </span>
           ))}
