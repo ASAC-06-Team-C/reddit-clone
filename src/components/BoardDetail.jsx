@@ -26,18 +26,18 @@ import { useParams } from 'react-router-dom'
 
 function BoardVoteComponent({ isVoted, postVoteCount, url, postNo, userNo, setIsVoted }) {
   // isVoted에 따른 컴포넌트 속성
-  // isVoted : NONE/LIKE/UNLIKE 중 하나
+  // isVoted : NONE/LIKE/DISLIKE 중 하나
   const { upvote, downvote } =
     {
       NONE: {
         upvote: { variant: 'ghost', iconSrc: '/img/up-arrow.svg', vote: 'LIKE' },
-        downvote: { variant: 'ghost', iconSrc: '/img/up-arrow-svgrepo-com.svg', vote: 'UNLIKE' },
+        downvote: { variant: 'ghost', iconSrc: '/img/up-arrow-svgrepo-com.svg', vote: 'DISLIKE' },
       },
       LIKE: {
         upvote: { variant: 'destructive', iconSrc: '/img/up-arrow.svg', vote: 'NONE' },
-        downvote: { variant: 'ghost', iconSrc: '/img/up-arrow-svgrepo-com.svg', vote: 'UNLIKE' },
+        downvote: { variant: 'ghost', iconSrc: '/img/up-arrow-svgrepo-com.svg', vote: 'DISLIKE' },
       },
-      UNLIKE: {
+      DISLIKE: {
         upvote: { variant: 'ghost', iconSrc: '/img/up-arrow.svg', vote: 'LIKE' },
         downvote: {
           variant: 'destructive',
@@ -52,7 +52,7 @@ function BoardVoteComponent({ isVoted, postVoteCount, url, postNo, userNo, setIs
     <IconButton
       variant={button.variant}
       iconSrc={button.iconSrc}
-      onClickEvent={onClickVote(url, postNo, userNo, button.vote, setIsVoted)}
+      onClickEvent={() => onClickVote(url, postNo, userNo, button.vote, setIsVoted)}
     />
   )
 
@@ -65,7 +65,7 @@ function BoardVoteComponent({ isVoted, postVoteCount, url, postNo, userNo, setIs
   )
 }
 
-async function onClickVote(url, postNo, userNo, postVoteType, setIsVoted) {
+const onClickVote = async (url, postNo, userNo, postVoteType, setIsVoted) => {
   setIsVoted(postVoteType)
   return fetch(url + 'vote', {
     method: 'POST',
@@ -78,11 +78,18 @@ async function onClickVote(url, postNo, userNo, postVoteType, setIsVoted) {
       post_vote_type: postVoteType,
     }),
   })
-    .then((res) => res.json())
+    .then((res) => {
+      switch (res.status) {
+        case 200:
+          return res.body
+        case 400:
+          console.log(`${res.status} 요청이 올바르지 않습니다. : ${res}`)
+      }
+    })
     .catch((err) => console.log(err))
 }
 
-function copyClipboard(copyText) {
+const copyClipboard = (copyText) => {
   navigator.clipboard
     .writeText(copyText)
     .then(() => console.log('Copy 완료 : ', copyText))
@@ -191,7 +198,7 @@ function BoardDetail({ className = null, props = null }) {
                 variant='secondary'
                 iconSrc={'/img/share-arrows.svg'}
                 text='Share'
-                onClick={copyClipboard(fullUrl)}
+                onClick={() => copyClipboard(fullUrl)}
               />
             </div>
           </CardFooter>
