@@ -23,6 +23,7 @@ import {
 import IconButton from '@/components/IconButton'
 import IconTextButton from '@/components/IconTextButton'
 import { useParams } from 'react-router-dom'
+import { calculator } from '@/lib/timeCalculator'
 
 function BoardVoteComponent({ isVoted, postVoteCount, url, postNo, userNo, setIsVoted }) {
   // isVoted에 따른 컴포넌트 속성
@@ -126,13 +127,7 @@ function BoardDetail({ className = null, props = null }) {
 
   useEffect(() => {
     if (content) {
-      setDiffDate(
-        Math.floor(
-          ((new Date().getTime() - new Date(content.post_write_date).getTime()) /
-            (24 * 60 * 60 * 1000)) *
-            100,
-        ) / 100,
-      )
+      setDiffDate(calculator(content.post_write_date))
       setIsVoted(content.author.is_voted)
     }
   }, [content])
@@ -156,7 +151,7 @@ function BoardDetail({ className = null, props = null }) {
                 </Avatar>
                 <div>{content.author.user_nickname}</div>
                 <div>•</div>
-                <div>{diffDate}일 전</div>
+                <div>{diffDate}</div>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
