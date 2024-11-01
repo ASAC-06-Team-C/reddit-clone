@@ -120,9 +120,10 @@ function Comment() {
         },
         body: JSON.stringify(commentData),
       })
+      console.log('type: ', commentData.comment_vote_type, 'commentNo: ', commentData.comment_no)
       setComments((prevComments) => {
         return prevComments.map((comment) =>
-          comment.commentNo === commentData.commentNo
+          comment.commentNo === commentData.comment_no
             ? { ...comment, commentVoteCount: comment.commentVoteCount + 1 }
             : comment,
         )

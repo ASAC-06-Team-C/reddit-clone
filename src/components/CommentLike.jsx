@@ -1,38 +1,42 @@
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 
 function CommentLike({ like, voteComment, commentNo }) {
   const [likes, setLikes] = useState(like)
-  const [likeState, setLikeState] = useState(false)
-  const [hateState, setHateState] = useState(false)
+  const [currentVoteType, setCurrentVoteType] = useState('NONE')
 
   const handleLike = () => {
-    if (likeState) {
+    if (currentVoteType === 'UP') {
       setLikes(likes - 1)
-      setLikeState(false)
-      // voteComment({ comment_no: commentNo, user_no: 1 /*임시 사용자 번호*/, vote_type: 'remove' })
+      setCurrentVoteType('NONE')
+      voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'NONE' })
     } else {
-      if (hateState) {
-        voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'uptodown' })  
+      if (currentVoteType === 'DOWN') {
         setLikes(likes + 2)
+        setCurrentVoteType('UP')
+        voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'UP' })
       } else {
-        voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'up' }) 
         setLikes(likes + 1)
+        setCurrentVoteType('UP')
+        voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'UP' })
       }
-      setLikeState(true)
-      setHateState(false)
     }
   }
 
   const handleHate = () => {
-    if (hateState) {
+    if (currentVoteType === 'DOWN') {
       setLikes(likes + 1)
-      setHateState(false)
+      setCurrentVoteType('NONE')
+      voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'NONE' })
     } else {
-      setLikes(likes - (likeState ? 2 : 1))
-      setHateState(true)
-      setLikeState(false)
-      voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'down' })
+      if (currentVoteType === 'UP') {
+        setLikes(likes - 2)
+        setCurrentVoteType('DOWN')
+        voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'DOWN' })
+      } else {
+        setLikes(likes - 1)
+        setCurrentVoteType('DOWN')
+        voteComment({ comment_no: commentNo, user_no: 1, comment_vote_type: 'DOWN' })
+      }
     }
   }
 
