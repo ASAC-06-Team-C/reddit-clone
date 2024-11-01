@@ -54,7 +54,7 @@ export default function DraftCard({ content, index, draft, setDraft }) {
           <p className='font-bold m-1 mt-2 ml-3'>{content.post_title}</p>
           <p className='text-xs m-1 ml-3 text-gray-500'>{calculator(content.post_write_date)}</p>
         </div>
-        <div>
+        <div className='flex items-center'>
           <Link to={`/post/${content.post_no}`}>
             <DialogClose>
               <Button variant='ghost' size='icon' className='hover:bg-gray-300'>
