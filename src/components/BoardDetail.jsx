@@ -126,7 +126,7 @@ function BoardDetail({ className = null, props = null }) {
             100,
         ) / 100,
       )
-      setIsVoted(content.is_voted)
+      setIsVoted(content.author.is_voted)
     }
   }, [content])
 
