@@ -97,6 +97,20 @@ const copyClipboard = (copyText) => {
     .catch((err) => console.log('Copy 실패 : ', err))
 }
 
+const deleteRequest = (postNo) => {
+  fetch(`http://localhost:8080/posts/${postNo}`, {
+    method: 'DELETE',
+  })
+    .then((res) => {
+      if (res.status == 200) {
+        console.log(res)
+      } else {
+        console.log(`${res.status} 에러 발생 : ${res}`)
+      }
+    })
+    .catch((err) => console.log(err))
+}
+
 function BoardDetail({ className = null, props = null }) {
   const url = 'http://localhost:8080/posts/'
   const { id } = useParams()
@@ -163,6 +177,9 @@ function BoardDetail({ className = null, props = null }) {
                   <DropdownMenuItem>Save</DropdownMenuItem>
                   <DropdownMenuItem>Hide</DropdownMenuItem>
                   <DropdownMenuItem>Report</DropdownMenuItem>
+                  <DropdownMenuItem className='test-red-500' onClick={() => deleteRequest(postNo)}>
+                    Delete
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
