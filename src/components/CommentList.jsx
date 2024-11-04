@@ -3,6 +3,7 @@ import { Viewer } from '@toast-ui/react-editor'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import { toCamelCase, formatDate } from '@/components/Comment'
+import CommentTextarea from './CommentTextarea'
 
 const CommentItem = ({
   comment,
@@ -17,7 +18,6 @@ const CommentItem = ({
   return (
     <div style={{ marginLeft: comment.commentDepth * 25, marginBottom: '30px' }}>
       <CommentHeader comment={comment} />
-      <Viewer initialValue={comment.commentContent} />
       <CommentActions
         comment={comment}
         currentUserNo={currentUserNo}
@@ -28,7 +28,7 @@ const CommentItem = ({
         updateComment={updateComment}
         voteComment={voteComment}
       />
-      {comment.replies?.map((reply) => (
+      {comment.reply?.map((reply) => (
         <CommentItem
           key={reply.commentNo}
           comment={reply}
@@ -65,64 +65,91 @@ const CommentActions = ({
   voteComment,
 }) => {
   const [isEditing, setIsEditing] = useState(false)
-  const [editText, setEditText] = useState(comment.commentContent)
+  const [isReply, setIsReply] = useState(false)
+  const [textOptionState, setTextOptionState] = useState(true)
+  const [inputValute, setInputValue] = useState(comment.commentContent)
 
-  const handleReply = () => {
-    if (replyText.trim()) {
-      addReply(comment.commentNo, replyText)
-      setReplyText('')
-    }
+  const handleTextOption = () => {
+    setTextOptionState((prevState) => !prevState)
   }
 
-  const handleUpdate = () => {
-    if (editText.trim()) {
+  const handleCancel = () => {
+    if (isEditing) setIsEditing((prevState) => !prevState)
+    if (isReply) setIsReply((prevState) => !prevState)
+  }
+
+  // const handleReply = () => {
+  //   if (replyText.trim()) {
+  //     addReply(comment.commentNo, replyText)
+  //     setReplyText('')
+  //   }
+  // }
+
+  const handleReply = () => {
+    setInputValue('')
+    setIsReply(true)
+  }
+
+  const handleComment = () => {
+    if (inputValute.trim() && isEditing) {
       updateComment({
         user_no: currentUserNo,
         comment_no: comment.commentNo,
-        comment_content: editText,
+        comment_content: inputValute,
       })
       setIsEditing(false)
+    } else if (inputValute.trim()) {
+      addReply(comment.commentNo, inputValute)
+      setIsReply(false)
     }
   }
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <CommentLike
-        like={comment.commentVoteCount}
-        voteComment={voteComment}
-        commentNo={comment.commentNo}
-      />
+    <>
       {comment.userNo === currentUserNo && (
         <>
-          {isEditing ? (
+          {isEditing || isReply ? (
             <>
-              <input type='text' value={editText} onChange={(e) => setEditText(e.target.value)} />
-              <Button onClick={handleUpdate}>저장</Button>
-              <Button onClick={() => setIsEditing(false)}>취소</Button>
+              {/* <input type='text' value={editText} onChange={(e) => setEditText(e.target.value)} /> */}
+              <div>
+                <CommentTextarea inputValue={inputValute} setInputValue={setInputValue} />
+              </div>
+              {/* <Button onClick={handleUpdate}>저장</Button>
+              <Button onClick={() => setIsEditing(false)}>취소</Button> */}
+              <div>
+                <Button onClick={handleTextOption}>T</Button>
+                <Button onClick={handleCancel}>Cancel</Button>
+                <Button onClick={() => handleComment()}>Comment</Button>
+              </div>
             </>
           ) : (
             <>
-              <Button onClick={() => setIsEditing(true)}>수정</Button>
-              <Button
-                onClick={() =>
-                  deleteComment({ user_no: currentUserNo, comment_no: comment.commentNo })
-                }
-              >
-                삭제
-              </Button>
+              <div>
+                <Viewer key={comment.commentContent} initialValue={comment.commentContent} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <CommentLike
+                  like={comment.commentVoteCount}
+                  voteComment={voteComment}
+                  commentNo={comment.commentNo}
+                />
+                <Button onClick={() => setIsEditing(true)}>수정</Button>
+                <Button onClick={() => deleteComment(comment)}>삭제</Button>
+                <Button onClick={handleReply}>답글</Button>
+                {/* <Button onClick={handleReply}>답글</Button> */}
+                {/* <input
+                  type='text'
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  placeholder='답글 입력'
+                  style={{ marginLeft: '10px' }}
+                /> */}
+              </div>
             </>
           )}
         </>
       )}
-      <Button onClick={handleReply}>답글</Button>
-      <input
-        type='text'
-        value={replyText}
-        onChange={(e) => setReplyText(e.target.value)}
-        placeholder='답글 입력'
-        style={{ marginLeft: '10px' }}
-      />
-    </div>
+    </>
   )
 }
 
@@ -157,21 +184,22 @@ function CommentList({
     const tree = []
 
     comments.forEach((comment) => {
-      comment.replies = []
+      comment.reply = []
       map[comment.commentNo] = comment
 
+      if (comment.commentDeleted) {
+        comment.commentContent = '삭제된 댓글입니다.'
+        comment.userNickname = '[deleted]'
+      }
       if (comment.commentMother === 0) {
         tree.push(comment) // 최상위 댓글이면 루트로 추가
       } else {
         const parent = map[comment.commentMother]
         if (parent) {
-          parent.replies.push(comment) // 부모 댓글의 replies에 추가
+          parent.reply.push(comment) // 부모 댓글의 reply에 추가
         }
       }
     })
-
-    console.log('Map:', map)
-    console.log('Roots:', tree)
 
     return tree
   }
@@ -183,11 +211,12 @@ function CommentList({
         if (comment.commentNo === targetNo) {
           return comment
         }
-        if (comment.replies && comment.replies.length > 0) {
-          const found = findComment(comment.replies, targetNo)
+        if (comment.reply && comment.reply.length > 0) {
+          const found = findComment(comment.reply, targetNo)
           if (found) return found
         }
       }
+
       return null
     }
 
@@ -214,15 +243,16 @@ function CommentList({
           if (comment.commentNo === motherNo) {
             return {
               ...comment,
-              replies: [...(comment.replies || []), createdComment],
+              reply: [...(comment.reply || []), createdComment],
             }
           }
-          if (comment.replies && comment.replies.length > 0) {
+          if (comment.reply && comment.reply.length > 0) {
             return {
               ...comment,
-              replies: updateCommentTree(comment.replies),
+              reply: updateCommentTree(comment.reply),
             }
           }
+
           return comment
         })
       }

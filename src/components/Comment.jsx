@@ -4,6 +4,7 @@ import CommentMarkdown from '@/components/CommentMarkdown'
 import CommentSearchBar from '@/components/CommentSearchBar'
 import CommentList from '@/components/CommentList'
 
+import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 
 export const toCamelCase = (obj) => {
@@ -32,9 +33,11 @@ export const formatDate = (dateString) => {
 
 function Comment() {
   const currentUserNo = 20 // 현재 사용자의 번호를 설정
+
   const [inputState, setInputState] = useState(true)
   const [textOptionState, setTextOptionState] = useState(true)
   const [inputValue, setInputValue] = useState('')
+
   const [comments, setComments] = useState([])
   const [searchState, setSearchState] = useState(true)
 
@@ -64,25 +67,30 @@ function Comment() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(commentData),
+        body: JSON.stringify({ user_no: currentUserNo, comment_no: commentData.commentNo }),
       })
 
-      const removeComment = (comments) => {
-        return comments.reduce((cumulativeComment, currentComment) => {
-          if (currentComment.commentNo === commentData.comment_no) {
-            return cumulativeComment
+      const deletedComment = (comments) => {
+        return comments.map((comment) => {
+          if (comment.commentNo === commentData.commentNo) {
+            return {
+              ...comment,
+              commentContent: '삭제된 댓글입니다.',
+              userNickname: '[x]',
+              commentDeleted: true,
+            }
           }
-
-          const updatedComment = {
-            ...currentComment,
-            replies: currentComment.replies ? removeComment(currentComment.replies) : [],
+          if (comment.reply && comment.reply.length > 0) {
+            return {
+              ...comment,
+              reply: deletedComment(comment.reply),
+            }
           }
-
-          return [...cumulativeComment, updatedComment]
-        }, [])
+          return comment
+        })
       }
 
-      setComments((prevComments) => removeComment(prevComments))
+      setComments((prevComments) => deletedComment(prevComments))
     } catch (error) {
       console.error('Error deleteComment: ', error)
     }
@@ -99,12 +107,25 @@ function Comment() {
         body: JSON.stringify(commentData),
       })
 
-      const updatedComments = comments.map((comment) =>
-        comment.commentNo === commentData.commentNo
-          ? { ...comment, commentContent: commentData.commentContent }
-          : comment,
-      )
-      setComments(updatedComments)
+      const updatedComment = (comments) => {
+        return comments.map((comment) => {
+          if (comment.commentNo === commentData.comment_no) {
+            return {
+              ...comment,
+              commentContent: commentData.comment_content,
+            }
+          }
+          if (comment.reply && comment.reply.length > 0) {
+            return {
+              ...comment,
+              reply: updatedComment(comment.reply),
+            }
+          }
+          return comment
+        })
+      }
+
+      setComments((prevComments) => updatedComment(prevComments))
     } catch (error) {
       console.log('Error updateComment: ', error)
     }
@@ -120,7 +141,7 @@ function Comment() {
         },
         body: JSON.stringify(commentData),
       })
-      console.log('type: ', commentData.comment_vote_type, 'commentNo: ', commentData.comment_no)
+
       setComments((prevComments) => {
         return prevComments.map((comment) =>
           comment.commentNo === commentData.comment_no
@@ -133,15 +154,51 @@ function Comment() {
     }
   }
 
-  const commonProps = {
-    currentUserNo,
-    inputValue,
-    setInputValue,
-    setInputState,
-    createComment,
-    setTextOptionState,
-    setComments,
+  // const commonProps = {
+  //   currentUserNo,
+  //   inputValue,
+  //   setInputValue,
+  //   setInputState,
+  //   createComment,
+  //   setTextOptionState,
+  //   setComments,
+  // }
+
+  const commentText = async () => {
+    const newCreateComment = {
+      post_no: 4, // 현재 게시물 번호
+      user_no: currentUserNo,
+      comment_content: inputValue,
+      comment_mother: 0,
+      comment_depth: 0,
+    }
+
+    try {
+      const newComment = await createComment(newCreateComment)
+      setComments((prevComments) => [...prevComments, newComment])
+      setInputValue('')
+    } catch (error) {
+      console.error('error ', error)
+    }
   }
+
+  const handleTextOption = () => {
+    setTextOptionState((prevState) => !prevState)
+  }
+
+  const handleCancel = () => {
+    setInputState((prevState) => !prevState)
+  }
+
+  const [editorState, setEditorState] = useState(true)
+
+  const handleState = (setState) => {
+    setState((prev) => !prev)
+  }
+  // const commonProps = {
+  //   inputValue,
+  //   setInputValue,
+  // }
 
   return (
     <>
@@ -149,9 +206,30 @@ function Comment() {
         inputState ? (
           <CommentInput setInputState={setInputState} />
         ) : textOptionState ? (
-          <CommentTextarea {...commonProps} />
+          <>
+            <CommentTextarea inputValue={inputValue} setInputValue={setInputValue} />
+            <div>
+              <Button onClick={handleTextOption}>T</Button>
+              <Button onClick={handleCancel}>Cancel</Button>
+              <Button onClick={() => commentText()}>Comment</Button>
+            </div>
+          </>
         ) : (
-          <CommentMarkdown {...commonProps} />
+          <>
+            <CommentMarkdown
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+              editorState={editorState}
+            />
+            <div>
+              <Button onClick={handleTextOption}>T</Button>
+              <Button onClick={handleCancel}>Cancel</Button>
+              <Button onClick={() => commentText()}>Comment</Button>
+              <Button onClick={() => handleState(setEditorState)}>
+                {editorState ? 'Markdown Editor' : 'Back to TextEditor'}
+              </Button>
+            </div>
+          </>
         )
       ) : null}
       <br />
