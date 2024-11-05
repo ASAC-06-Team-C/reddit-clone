@@ -13,7 +13,7 @@ function RedditMainSelectItem() {
 
   return (
     <>
-      <div className='relative left-[45%] flex flex-low mt-1'>
+      <div className='relative left-[45%] flex flex-low mt-1 mb-1'>
         <Select
           onValueChange={(value) => {
             setArraySortBy(value)
