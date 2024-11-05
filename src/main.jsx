@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import '@/index.css'
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, useParams } from 'react-router-dom'
 import TextEditor from '@/components/TextEditor'
 import UploadFile from '@/components/FileUpload'
 import LinkUpload from '@/components/LinkUpload'
@@ -57,7 +57,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'detail',
+        path: 'posts/:id',
         element: <BoardDetailPage />,
       },
     ],

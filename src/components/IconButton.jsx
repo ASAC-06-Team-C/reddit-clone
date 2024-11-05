@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button'
 
-function IconButton({ iconSrc, variant }) {
+function IconButton({ iconSrc, variant, onClickEvent }) {
   return (
     <>
-      <Button size='icon' variant={variant} className='rounded-full'>
+      <Button size='icon' variant={variant} className='rounded-full' onClick={onClickEvent}>
         <img src={iconSrc} className='h-4 w-4'></img>
       </Button>
     </>
