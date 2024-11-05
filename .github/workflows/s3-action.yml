@@ -21,7 +21,7 @@ jobs:
 
       # node module을 전부 지우고 package 파일 기반 의존성 설치
       - name: npm clean and install Dependencies
-        run: npm ci --force
+        run: npm install --force
 
       # vite를 통한 bundled HTML, CSS, JS build
       - name: Build bundled file
