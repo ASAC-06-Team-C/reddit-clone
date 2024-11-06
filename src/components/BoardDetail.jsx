@@ -24,6 +24,7 @@ import IconButton from '@/components/IconButton'
 import IconTextButton from '@/components/IconTextButton'
 import { useParams } from 'react-router-dom'
 import { calculator } from '@/lib/timeCalculator'
+import { DomainName } from '@/constants/pathGroup'
 
 function BoardVoteComponent({ isVoted, postVoteCount, url, postNo, userNo, setIsVoted }) {
   // isVoted에 따른 컴포넌트 속성
@@ -98,7 +99,7 @@ const copyClipboard = (copyText) => {
 }
 
 const deleteRequest = (postNo) => {
-  fetch(`http://localhost:8080/posts/${postNo}`, {
+  fetch(`http://${DomainName}/posts/${postNo}`, {
     method: 'DELETE',
   })
     .then((res) => {
@@ -112,7 +113,7 @@ const deleteRequest = (postNo) => {
 }
 
 function BoardDetail({ className = null, props = null }) {
-  const url = 'http://localhost:8080/posts/'
+  const url = `http://${DomainName}/posts/`
   const { id } = useParams()
   const postNo = props ? props.post_no : id
   const fullUrl = url + postNo
