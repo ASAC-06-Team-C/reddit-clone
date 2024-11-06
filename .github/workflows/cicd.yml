@@ -60,7 +60,7 @@ jobs:
           port: ${{secrets.KANG_EC2_SSH_PORT}}
           timeout: 60s
           script: |
-            sduo docker-compose rm -s nginx_container_service
+            sudo docker-compose rm -s nginx_container_service
             sudo docker rmi nginximage:product
             sudo docker load -i nginximage.tar
             sudo docker-compose up -d nginx_container_service
