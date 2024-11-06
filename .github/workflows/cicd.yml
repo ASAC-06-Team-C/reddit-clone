@@ -17,7 +17,10 @@ jobs:
         run: docker build -t nginximage:product .
 
       - name: save docker image to tar file
-        run: docker save -o nginximage.tar nginximage:product
+        run: |
+          docker save -o nginximage.tar nginximage:product
+          ls -l
+          chmod 664 nginximage.tar
 
       - name: get GitHub IP
         id: ip
