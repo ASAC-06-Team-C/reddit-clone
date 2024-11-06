@@ -12,7 +12,7 @@ export default function DraftCard({ content, index, draft, setDraft }) {
   const { toast } = useToast()
   async function deleteDraft(index, post_no) {
     console.log(draft)
-    await fetch(`http://localhost:8080/drafts`, {
+    await fetch(`http://3.38.116.245:8080/drafts`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',

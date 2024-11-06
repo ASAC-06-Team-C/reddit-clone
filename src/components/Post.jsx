@@ -22,7 +22,7 @@ function TitleContextProvider({ children }) {
 
 async function getDrafts() {
   const dummyUserNo = 0
-  const request = await fetch(`http://localhost:8080/drafts/?user_no=${dummyUserNo}`)
+  const request = await fetch(`http://3.38.116.245:8080/drafts/?user_no=${dummyUserNo}`)
   const response = await request.json()
   return response
 }

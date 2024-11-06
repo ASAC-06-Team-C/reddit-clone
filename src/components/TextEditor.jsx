@@ -19,7 +19,7 @@ function TextEditor() {
   useEffect(() => {
     console.log(postNumberParam)
     if (postNumberParam?.post_no) {
-      fetch(`http://localhost:8080/drafts/${postNumberParam.post_no}`)
+      fetch(`http://3.38.116.245:8080/drafts/${postNumberParam.post_no}`)
         .then((res) => res.json())
         .then((draft) => {
           setTitle(draft.post_title)
@@ -51,7 +51,7 @@ function TextEditor() {
           post_draft: isDraft,
         }
     console.log(requestObject)
-    await fetch(`http://localhost:8080/${isDraft ? 'drafts' : 'posts'}`, {
+    await fetch(`http://3.38.116.245:8080/${isDraft ? 'drafts' : 'posts'}`, {
       method: postNumberParam?.post_no ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
