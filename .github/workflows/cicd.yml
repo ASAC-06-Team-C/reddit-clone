@@ -55,10 +55,10 @@ jobs:
           port: ${{secrets.KANG_EC2_SSH_PORT}}
           timeout: 60s
           script: |
-            docker-compose rm -s nginx_container_service
-            docker rmi nginximage:product
-            docker load -i nginximage.tar
-            docker-compose up -d nginx_container_service
+            sduo docker-compose rm -s nginx_container_service
+            sudo docker rmi nginximage:product
+            sudo docker load -i nginximage.tar
+            sudo docker-compose up -d nginx_container_service
 
       - name: remove IP from security group
         run: |
