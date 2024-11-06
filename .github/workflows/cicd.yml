@@ -44,7 +44,7 @@ jobs:
           host: ${{secrets.KANG_EC2_HOST}}
           key: ${{secrets.KANG_EC2_PEMKEY}}
           port: ${{secrets.KANG_EC2_SSH_PORT}}
-          source: 'nginx.tar'
+          source: 'nginximage.tar'
           target: /home/ec2-user
 
       - name: AWS EC2 connection
