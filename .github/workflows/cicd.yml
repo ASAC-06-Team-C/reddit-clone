@@ -47,14 +47,16 @@ jobs:
           host: ${{secrets.KANG_EC2_HOST}}
           key: ${{secrets.KANG_EC2_PEMKEY}}
           port: ${{secrets.KANG_EC2_SSH_PORT}}
+          username: ${{secrets.KANG_EC2_USERNAME}}
           source: 'nginximage.tar'
-          target: /home/ec2-user
+          target: /home/${{secrets.KANG_EC2_USERNAME}}
 
       - name: AWS EC2 connection
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{secrets.KANG_EC2_HOST}}
           key: ${{secrets.KANG_EC2_PEMKEY}}
+          username: ${{secrets.KANG_EC2_USERNAME}}
           port: ${{secrets.KANG_EC2_SSH_PORT}}
           timeout: 60s
           script: |
