@@ -8,4 +8,4 @@ export const MAIN_DOMAIN = 'http://api.reddit-clone.com'
 
 // 개인 사용 도메인 추가
 
-export const PATH_GET_READ_POSTS = '/posts'
+export const PATH_POSTS = '/posts'
