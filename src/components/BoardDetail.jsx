@@ -24,7 +24,7 @@ import IconButton from '@/components/IconButton'
 import IconTextButton from '@/components/IconTextButton'
 import { useParams } from 'react-router-dom'
 import { calculator } from '@/lib/timeCalculator'
-import { MAIN_DOMAIN, PATH_GET_READ_POSTS } from '@/constants/API'
+import { MAIN_DOMAIN, PATH_POSTS } from '@/constants/API'
 
 function BoardVoteComponent({ isVoted, postVoteCount, url, postNo, userNo, setIsVoted }) {
   // isVoted에 따른 컴포넌트 속성
@@ -99,7 +99,7 @@ const copyClipboard = (copyText) => {
 }
 
 const deleteRequest = (postNo) => {
-  fetch(`${MAIN_DOMAIN + PATH_GET_READ_POSTS}/${postNo}`, {
+  fetch(`${MAIN_DOMAIN + PATH_POSTS}/${postNo}`, {
     method: 'DELETE',
   })
     .then((res) => {
@@ -113,7 +113,7 @@ const deleteRequest = (postNo) => {
 }
 
 function BoardDetail({ className = null, props = null }) {
-  const url = `${MAIN_DOMAIN + PATH_GET_READ_POSTS}/`
+  const url = `${MAIN_DOMAIN + PATH_POSTS}/`
   const { id } = useParams()
   const postNo = props ? props.post_no : id
   const fullUrl = url + postNo
