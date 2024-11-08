@@ -1,5 +1,5 @@
 import { CreatedContext } from '@/components/Post'
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { Input } from '@/components/ui/input'
 import '@/index.css'
 

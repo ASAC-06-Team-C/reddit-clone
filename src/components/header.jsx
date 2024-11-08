@@ -1,4 +1,4 @@
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import TooltipComponent from '@/components/TooltipComponent'
 import { Input } from '@/components/ui/input'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
@@ -8,47 +8,23 @@ import redditAvatar from '/img/reddit-avatar.svg'
 import { Button } from '@/components/ui/button'
 import createCross from '/img/create-cross.svg'
 import searchIcon from '/img/search.svg'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
-import LoginButton from '@/components/LoginButton'
+import DialogButton from '@/components/DialogButton'
 
 function Header() {
   return (
     <>
-      <div
-        style={{
-          height: '56px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <div className=' flex'>
-          <TooltipProvider>
-            <Tooltip>
-              <div style={{ minWidth: '264px' }}>
-                <TooltipTrigger>
-                  <a href='/' className='flex items-center w-32'>
-                    <img src={redditAvatar} className=' mr-2 align-center'></img>
-                    <img src={redditLogo} style={{ fill: '#FF4500' }} className='h-6 w-20'></img>
-                  </a>
-                </TooltipTrigger>
-              </div>
-              <TooltipContent>
-                <p>Go to Reddit Home</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <div className='flex' style={{ minWidth: '500px' }}>
-            <img src={searchIcon} className='relative left-7'></img>
+      <div className='h-[56px] flex items-center justify-between sticky top-0'>
+        <div className='flex'>
+          <div className='min-w-[264px]'>
+            <TooltipComponent message={'Go to Reddit Home'}>
+              <a href='/' className='flex items-center w-32 mt-2'>
+                <img src={redditAvatar} className=' mr-2 align-center'></img>
+                <img src={redditLogo} className='h-6 w-20 fill-[#FF4500]'></img>
+              </a>
+            </TooltipComponent>
+          </div>
+          <div className='flex min-w-[500px] mt-1'>
+            <img src={searchIcon} className='relative left-7 top-3 h-[16px] w-[16px]'></img>
             <Input type='text' className='h-10 pl-10' placeholder='Search Reddit'></Input>
           </div>
         </div>
@@ -59,20 +35,13 @@ function Header() {
               Create
             </Button>
           </a>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Avatar>
-                  <AvatarImage src='https://github.com/shadcn.png' />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Open profile menu</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          {/* <LoginButton></LoginButton> */}
+          <TooltipComponent message={'Open profile menu'}>
+            <Avatar>
+              <AvatarImage src='https://github.com/shadcn.png' />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </TooltipComponent>
+          <DialogButton />
         </div>
       </div>
       <Separator />
