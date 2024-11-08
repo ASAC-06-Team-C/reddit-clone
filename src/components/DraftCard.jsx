@@ -7,12 +7,13 @@ import { DialogClose } from '@radix-ui/react-dialog'
 import { calculator } from '@/lib/timeCalculator'
 import { useToast } from '@/hooks/use-toast'
 import { ToastAction } from '@/components/ui/toast'
+import * as API from '@/constants/API'
 
 export default function DraftCard({ content, index, draft, setDraft }) {
   const { toast } = useToast()
   async function deleteDraft(index, post_no) {
     console.log(draft)
-    await fetch(`http://localhost:8080/drafts`, {
+    await fetch(`${API.MAIN_DOMAIN + API.PATH_DRAFTS}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',

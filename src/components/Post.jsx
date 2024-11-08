@@ -7,6 +7,7 @@ import DraftButton from '@/components/DraftButton'
 import ChangeTypeLink from '@/components/ChangeTypeLink'
 import { useToast } from '@/hooks/use-toast'
 import { ToastAction } from '@/components/ui/toast'
+import * as API from '@/constants/API'
 
 const defaultString = ''
 const CreatedContext = createContext({ title: defaultString, setTitle: (state) => {} })
@@ -22,7 +23,7 @@ function TitleContextProvider({ children }) {
 
 async function getDrafts() {
   const dummyUserNo = 0
-  const request = await fetch(`http://localhost:8080/drafts/?user_no=${dummyUserNo}`)
+  const request = await fetch(`${API.MAIN_DOMAIN + API.PATH_DRAFTS}/?user_no=${dummyUserNo}`)
   const response = await request.json()
   return response
 }

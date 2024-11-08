@@ -6,6 +6,7 @@ import InputTitle from '@/components/InputTitle'
 import { useParams } from 'react-router-dom'
 import { CreatedContext } from '@/components/Post'
 import { useToast } from '@/hooks/use-toast'
+import * as API from '@/constants/API'
 
 function TextEditor() {
   const [isValid, setIsValid] = useState(true)
@@ -19,7 +20,7 @@ function TextEditor() {
   useEffect(() => {
     console.log(postNumberParam)
     if (postNumberParam?.post_no) {
-      fetch(`http://localhost:8080/drafts/${postNumberParam.post_no}`)
+      fetch(`${API.MAIN_DOMAIN + API.PATH_DRAFTS}/${postNumberParam.post_no}`)
         .then((res) => res.json())
         .then((draft) => {
           setTitle(draft.post_title)
@@ -51,7 +52,7 @@ function TextEditor() {
           post_draft: isDraft,
         }
     console.log(requestObject)
-    await fetch(`http://localhost:8080/${isDraft ? 'drafts' : 'posts'}`, {
+    await fetch(`${API.MAIN_DOMAIN}/${isDraft ? API.PATH_DRAFTS : API.PATH_POSTS}`, {
       method: postNumberParam?.post_no ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
