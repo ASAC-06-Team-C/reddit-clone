@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import { toCamelCase, formatDate } from '@/components/Comment'
 import CommentTextarea from './CommentTextarea'
+import { MAIN_DOMAIN, PATH_POSTS, PATH_COMMENTS } from '@/constants/API'
 
 const CommentItem = ({
   comment,
@@ -170,7 +171,7 @@ function CommentList({
   const getComment = async () => {
     try {
       const response = await fetch(
-        'http://localhost:8080/comments?post_no=4&sort_type=asc&post_comment_count=10&comment_page=2',
+        `${MAIN_DOMAIN + PATH_COMMENTS}?post_no=4&sort_type=asc&post_comment_count=10&comment_page=2`,
       )
       const responseComment = (await response.json()).map(toCamelCase)
       setComments(commentTree(responseComment))

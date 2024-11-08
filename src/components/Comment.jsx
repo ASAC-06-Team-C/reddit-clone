@@ -3,6 +3,7 @@ import CommentTextarea from '@/components/CommentTextarea'
 import CommentMarkdown from '@/components/CommentMarkdown'
 import CommentSearchBar from '@/components/CommentSearchBar'
 import CommentList from '@/components/CommentList'
+import { MAIN_DOMAIN, PATH_POSTS, PATH_COMMENTS } from '@/constants/API'
 
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
@@ -44,7 +45,8 @@ function Comment() {
   // 댓글 생성
   const createComment = async (commentData) => {
     try {
-      const response = await fetch('http://localhost:8080/comments', {
+      const response = await fetch(`${MAIN_DOMAIN + PATH_COMMENTS}`, {
+        // const response = await fetch('http://localhost:8080/comments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +64,7 @@ function Comment() {
   // 댓글 삭제
   const deleteComment = async (commentData) => {
     try {
-      await fetch('http://localhost:8080/comments', {
+      await fetch(`${MAIN_DOMAIN + PATH_COMMENTS}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +101,7 @@ function Comment() {
   // 댓글 수정
   const updateComment = async (commentData) => {
     try {
-      await fetch('http://localhost:8080/comments', {
+      await fetch(`${MAIN_DOMAIN + PATH_COMMENTS}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -134,7 +136,7 @@ function Comment() {
   // 댓글 투표
   const voteComment = async (commentData) => {
     try {
-      await fetch('http://localhost:8080/comments/vote', {
+      await fetch(`${MAIN_DOMAIN + PATH_COMMENTS}/vote`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
