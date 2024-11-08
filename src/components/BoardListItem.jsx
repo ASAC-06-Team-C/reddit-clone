@@ -1,7 +1,7 @@
 import { marked } from 'marked'
 import { useState } from 'react'
 
-import { Button } from './components/ui/button'
+import { Button } from './ui/button'
 import {
   Card,
   CardContent,
@@ -19,48 +19,34 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import IconButton from '@/components/IconButton'
 
-import profileImg from '@/resources/blank-profile-picture-973460_960_720.webp'
-import threeDotsImg from '@/resources/three-dots.svg'
-import upArrowImg from '@/resources/up-arrow.svg'
-import downArrowImg from '@/resources/up-arrow-svgrepo-com.svg'
-import talkImg from '@/resources/306434.svg'
-import shareImg from '@/resources/share-arrows.svg'
+import IconButton from '@/components/IconButton'
 import IconTextButton from '@/components/IconTextButton'
 
-function MDviewer({ markdown, setMarkdown }) {
-  return (
-    <div className='flex'>
-      <div>
-        <textarea onChange={(e) => setMarkdown(e.currentTarget.value)} />
-      </div>
-      <div dangerouslySetInnerHTML={{ __html: marked.parse(markdown) }} className='prose'></div>
-    </div>
-  )
-}
-
-function Board() {
+function BoardListItem({ className, props }) {
   const [markdown, setMarkdown] = useState('')
+
+  const listItem = props
 
   return (
     <>
-      <Card className='w-full'>
+      <Card className={className}>
         <CardHeader>
           <div className='flex justify-between'>
             <div className='flex items-center gap-2'>
               <Avatar>
-                <AvatarImage src={profileImg} />
+                <AvatarImage src={'img/blank-profile-picture-973460_960_720.webp'} />
                 <AvatarFallback>KOR</AvatarFallback>
               </Avatar>
-              <div>강석훈</div>
-              <div>•</div>
-              <div>14 days ago</div>
+              <div>{listItem.post_title}</div>
+              <div>{listItem.user_no}</div>
+              {/* user ID 를 받아와야 할 듯...*/}
+              <div>{new Date(listItem.post_write_date).toString()}</div>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button size='icon' variant='ghost'>
-                  <img src={threeDotsImg} className='h-4 w-4'></img>
+                  <img src={'img/three-dots.svg'} className='h-4 w-4'></img>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -71,16 +57,20 @@ function Board() {
             </DropdownMenu>
           </div>
         </CardHeader>
-        <CardContent></CardContent>
+        <CardContent>{listItem.post_content}</CardContent>
         <CardFooter>
           <div className='flex gap-2'>
             <div className='rounded-full bg-gray-200'>
-              <IconButton variant='ghost' iconSrc={upArrowImg} />
-              0
-              <IconButton variant='ghost' iconSrc={downArrowImg} />
+              <IconButton variant='ghost' iconSrc={'img/up-arrow.svg'} />
+              {listItem.post_vote_count}
+              <IconButton variant='ghost' iconSrc={'img/up-arrow-svgrepo-com.svg'} />
             </div>
-            <IconTextButton variant='secondary' iconSrc={talkImg} text='0' />
-            <IconTextButton variant='secondary' iconSrc={shareImg} text='Share' />
+            <IconTextButton
+              variant='secondary'
+              iconSrc={'img/306434.svg'}
+              text={listItem.post_comment_count}
+            />
+            <IconTextButton variant='secondary' iconSrc={'img/share-arrows.svg'} text='Share' />
           </div>
         </CardFooter>
       </Card>
@@ -88,4 +78,4 @@ function Board() {
   )
 }
 
-export default Board
+export default BoardListItem
