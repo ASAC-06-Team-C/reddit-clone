@@ -3,30 +3,35 @@ import { Button } from '@/components/ui/button'
 import { useRef } from 'react'
 
 function CommentTextarea({
-  setTextOptionState,
-  setInputState,
-  setText,
+  // currentUserNo,
+  // inputValue,
+  // setInputValue,
+  // setTextOptionState,
+  // setInputState,
+  // createComment,
+  // setComments,
   inputValue,
   setInputValue,
-  comments,
-  currentUserId,
 }) {
   const commentRef = useRef(null)
 
-  const commentText = (comments) => {
-    const newValue = {
-      id: comments.length + 1,
-      postId: 123,
-      userId: currentUserId,
-      content: inputValue,
-      date: new Date().toISOString(),
-      profileImage: 'https://example.com/example.jpg',
-      likes: 5,
-      replies: [],
-    }
-    setText(newValue)
-    setInputValue('')
-  }
+  // const commentText = async () => {
+  //   const newCreateComment = {
+  //     post_no: 4, // 현재 게시물 번호
+  //     user_no: currentUserNo,
+  //     comment_content: inputValue,
+  //     comment_mother: 0,
+  //     comment_depth: 0,
+  //   }
+
+  //   try {
+  //     const newComment = await createComment(newCreateComment)
+  //     setComments((prevComments) => [...prevComments, newComment])
+  //     setInputValue('')
+  //   } catch (error) {
+  //     console.error('error ', error)
+  //   }
+  // }
 
   const handleResizeHeight = () => {
     commentRef.current.style.height = 'auto'
@@ -38,13 +43,13 @@ function CommentTextarea({
     handleResizeHeight()
   }
 
-  const handleTextOption = () => {
-    setTextOptionState((prevState) => !prevState)
-  }
+  // const handleTextOption = () => {
+  //   setTextOptionState((prevState) => !prevState)
+  // }
 
-  const handleCancel = () => {
-    setInputState((prevState) => !prevState)
-  }
+  // const handleCancel = () => {
+  //   setInputState((prevState) => !prevState)
+  // }
 
   return (
     <>
@@ -57,11 +62,11 @@ function CommentTextarea({
           style={{ height: '24px', width: 'calc(100% - 24px)', outline: 'none', margin: '18px' }}
         />
       </Card>
-      <div>
+      {/* <div>
         <Button onClick={handleTextOption}>T</Button>
         <Button onClick={handleCancel}>Cancel</Button>
-        <Button onClick={() => commentText(comments)}>Comment</Button>
-      </div>
+        <Button onClick={() => commentText()}>Comment</Button>
+      </div> */}
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Editor } from '@toast-ui/react-editor'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const EditorComponent = ({ handleInputChange, commentRef, inputValue, editorType }) => (
   <Editor
@@ -18,37 +18,48 @@ const EditorComponent = ({ handleInputChange, commentRef, inputValue, editorType
 )
 
 function CommentMarkdown({
-  setInputState,
+  // setInputState,
+  // inputValue,
+  // setInputValue,
+  // createComment,
+  // setTextOptionState,
+  // setComments,
+  // currentUserNo,
+
   inputValue,
   setInputValue,
-  setText,
-  setTextOptionState,
-  comments,
-  currentUserId,
+  editorState,
 }) {
-  const [editorState, setEditorState] = useState(true)
+  // const [editorState, setEditorState] = useState(true)
 
   const commentRef = useRef(null)
-
-  const handleState = (setState) => {
-    setState((prev) => !prev)
-  }
-
-  const commentText = (comments) => {
-    const newValue = {
-      id: comments.length + 1,
-      postId: 123,
-      userId: currentUserId,
-      content: inputValue,
-      date: new Date(),
-      profileImage: 'https://example.com/example.jpg',
-      likes: 5,
-      replies: [],
+  useEffect(() => {
+    if (inputValue === '') {
+      commentRef.current.getInstance().setMarkdown('')
     }
-    setText(newValue)
-    commentRef.current.getInstance().setMarkdown('')
-    setInputValue('')
-  }
+  }, [inputValue])
+
+  // const handleState = (setState) => {
+  //   setState((prev) => !prev)
+  // }
+
+  // const commentText = async () => {
+  //   const newCreateComment = {
+  //     post_no: 4, // 현재 게시물 번호
+  //     user_no: currentUserNo,
+  //     comment_content: inputValue,
+  //     comment_mother: 0, // 부모 댓글 no
+  //     comment_depth: 0, // 댓글의 깊이
+  //   }
+  //   try {
+  //     const newComment = await createComment(newCreateComment)
+  //     setComments((prevComments) => [...prevComments, newComment])
+  //     commentRef.current.getInstance().setMarkdown('')
+  //     setInputValue('')
+  //   } catch (error) {
+  //     console.log('error', error)
+  //   }
+  // }
 
   const handleInputChange = () => {
     const markdownText = commentRef.current.getInstance().getMarkdown()
@@ -63,12 +74,12 @@ function CommentMarkdown({
         inputValue={inputValue}
         editorType={editorState ? 'wysiwyg' : 'markdown'}
       />
-      <Button onClick={() => handleState(setTextOptionState)}>T</Button>
+      {/* <Button onClick={() => handleState(setTextOptionState)}>T</Button>
       <Button onClick={() => handleState(setInputState)}>Cancel</Button>
-      <Button onClick={() => commentText(comments)}>Comment</Button>
-      <Button onClick={() => handleState(setEditorState)}>
+      <Button onClick={() => commentText()}>Comment</Button> */}
+      {/* <Button onClick={() => handleState(setEditorState)}>
         {editorState ? 'Markdown Editor' : 'Back to TextEditor'}
-      </Button>
+      </Button> */}
     </div>
   )
 }
