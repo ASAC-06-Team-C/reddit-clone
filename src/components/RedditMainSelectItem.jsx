@@ -7,15 +7,15 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-function RedditFirstAttachPage() {
+function RedditMainSelectItem() {
   const [arraySortBy, setArraySortBy] = useState('best')
+  const [viewType, setViewType] = useState('cardView')
 
   return (
     <>
-      <div className='fixed top-[56px] left-[45%] flex flex-low'>
+      <div className='relative left-[45%] flex flex-low mt-1 mb-1'>
         <Select
           onValueChange={(value) => {
-            console.log(value)
             setArraySortBy(value)
           }}
         >
@@ -32,7 +32,7 @@ function RedditFirstAttachPage() {
         </Select>
         <Select
           onValueChange={(value) => {
-            console.log(value)
+            setViewType(value)
           }}
         >
           <SelectTrigger className='w-[100px] right-0 bg-blue-500 p-4 shadow-md'>
@@ -44,9 +44,8 @@ function RedditFirstAttachPage() {
           </SelectContent>
         </Select>
       </div>
-      <div className='fixed top-'>dasds</div>
     </>
   )
 }
 
-export default RedditFirstAttachPage
+export default RedditMainSelectItem

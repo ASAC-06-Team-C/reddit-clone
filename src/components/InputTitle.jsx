@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { CreatedContext } from '@/components/Post'
+import { useEffect, useContext } from 'react'
 import { Input } from '@/components/ui/input'
 import '@/index.css'
 
-function InputTitle({ reference }) {
-  const [title, setTitle] = useState('')
-  const [isValid, setIsValid] = useState(true)
+function InputTitle({ reference, isValid, setIsValid }) {
+  const { title, setTitle } = useContext(CreatedContext)
 
   useEffect(() => {
     function inputValidation(string) {

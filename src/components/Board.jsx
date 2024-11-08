@@ -1,6 +1,12 @@
+// 라이브러리
 import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 import { useState } from 'react'
 
+// 외부 자료
+import BoardMock from '@/mock/BoardMock.json'
+
+// 컴포넌트
 import { Button } from './ui/button'
 import {
   Card,
@@ -20,37 +26,22 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import IconButton from '@/components/IconButton'
-
-import profileImg from '@/resources/blank-profile-picture-973460_960_720.webp'
-import threeDotsImg from '@/resources/three-dots.svg'
-import upArrowImg from '@/resources/up-arrow.svg'
-import downArrowImg from '@/resources/up-arrow-svgrepo-com.svg'
-import talkImg from '@/resources/306434.svg'
-import shareImg from '@/resources/share-arrows.svg'
 import IconTextButton from '@/components/IconTextButton'
 
-function MDviewer({ markdown, setMarkdown }) {
-  return (
-    <div className='flex'>
-      <div>
-        <textarea onChange={(e) => setMarkdown(e.currentTarget.value)} />
-      </div>
-      <div dangerouslySetInnerHTML={{ __html: marked.parse(markdown) }} className='prose'></div>
-    </div>
-  )
-}
-
 function Board() {
-  const [markdown, setMarkdown] = useState('')
+  const boardData = BoardMock[0]
+
+  const [comments, setComments] = useState(boardData.comments)
+  const [likes, setLikes] = useState(boardData.likes)
 
   return (
     <>
-      <Card className='w-full'>
+      <Card>
         <CardHeader>
           <div className='flex justify-between'>
             <div className='flex items-center gap-2'>
               <Avatar>
-                <AvatarImage src={profileImg} />
+                <AvatarImage src={'img/blank-profile-picture-973460_960_720.webp'} />
                 <AvatarFallback>KOR</AvatarFallback>
               </Avatar>
               <div>강석훈</div>
@@ -60,7 +51,7 @@ function Board() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button size='icon' variant='ghost'>
-                  <img src={threeDotsImg} className='h-4 w-4'></img>
+                  <img src={'img/three-dots.svg'} className='h-4 w-4'></img>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -71,16 +62,23 @@ function Board() {
             </DropdownMenu>
           </div>
         </CardHeader>
-        <CardContent></CardContent>
+        <CardContent>
+          <div
+            className='prose'
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(marked.parse(boardData.contents)),
+            }}
+          ></div>
+        </CardContent>
         <CardFooter>
           <div className='flex gap-2'>
             <div className='rounded-full bg-gray-200'>
-              <IconButton variant='ghost' iconSrc={upArrowImg} />
-              0
-              <IconButton variant='ghost' iconSrc={downArrowImg} />
+              <IconButton variant='ghost' iconSrc={'img/up-arrow.svg'} />
+              {likes}
+              <IconButton variant='ghost' iconSrc={'img/up-arrow-svgrepo-com.svg'} />
             </div>
-            <IconTextButton variant='secondary' iconSrc={talkImg} text='0' />
-            <IconTextButton variant='secondary' iconSrc={shareImg} text='Share' />
+            <IconTextButton variant='secondary' iconSrc={'img/306434.svg'} text={comments} />
+            <IconTextButton variant='secondary' iconSrc={'img/share-arrows.svg'} text='Share' />
           </div>
         </CardFooter>
       </Card>
