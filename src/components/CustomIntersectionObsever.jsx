@@ -2,7 +2,7 @@ import BoardDetail from '@/components/BoardDetail'
 import RedditMainSelectItem from '@/components/RedditMainSelectItem'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useEffect, useRef, useState } from 'react'
-import { MAIN_DOMAIN, PATH_GET_READ_POSTS } from '@/constants/API'
+import { MAIN_DOMAIN, PATH_POSTS } from '@/constants/API'
 
 let options = {
   root: document.querySelector('scroll-area'), // 대상 객체의 가시성 확인.
@@ -21,7 +21,7 @@ export default function CustomIntersectionObsever() {
     // 새로운 데이터를 불러올 API 엔드포인트에 요청을 보냅니다.
     const response = await fetch(
       // `https://dummyjson.com/products?limit=10&skip=${pageRef.current * 10}`,
-      `${MAIN_DOMAIN + PATH_GET_READ_POSTS}?sort_type=hot&pages=1&content_count=10`,
+      `${MAIN_DOMAIN + PATH_POSTS}?sort_type=hot&pages=1&content_count=10`,
     )
 
     // 응답 데이터를 JSON 형식으로 파싱합니다.
