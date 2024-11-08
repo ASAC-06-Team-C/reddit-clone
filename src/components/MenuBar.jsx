@@ -8,7 +8,7 @@ import {
 export default function MenuBar() {
   return (
     <>
-      <div style={{ width: '240px', margin: '16px', flexShrink: 0 }}>
+      <div className='w-[240px] m-[16px] shrink-0 sticky left-0'>
         <Accordion type='single' collapsible>
           <AccordionItem value='item-1'>
             <AccordionTrigger>Community</AccordionTrigger>
