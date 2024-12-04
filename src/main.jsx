@@ -10,6 +10,7 @@ import BoardsPage from '@/pages/BoardsPage'
 import PostPage from '@/pages/PostPage'
 import BoardDetailPage from '@/pages/BoardDetailPage'
 import Layout from '@/components/Layout'
+import AccountPage from '@/pages/AccountPage'
 
 const router = createBrowserRouter([
   {
@@ -57,9 +58,12 @@ const router = createBrowserRouter([
         ],
       },
       {
-
         path: 'posts/:id',
         element: <BoardDetailPage />,
+      },
+      {
+        path: 'signup',
+        element: <AccountPage />,
       },
     ],
   },

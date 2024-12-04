@@ -37,16 +37,18 @@ function TextEditor() {
 
   async function request(isDraft) {
     //user_no의 경우 추후 수정해야 합니다.
+    const userNo = JSON.parse(localStorage.getItem('loginStatus')).user_no
+
     const requestObject = postNumberParam?.post_no
       ? {
           post_no: postNumberParam?.post_no,
-          user_no: 0,
+          user_no: userNo,
           post_title: titleRef?.current?.value,
           post_content: textRef?.current.getInstance().getMarkdown(),
           post_draft: isDraft,
         }
       : {
-          user_no: 0,
+          user_no: userNo,
           post_title: titleRef?.current?.value,
           post_content: textRef?.current.getInstance().getMarkdown(),
           post_draft: isDraft,
