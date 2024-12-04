@@ -28,8 +28,6 @@ export default function CreateAccount() {
       user_nickname: nicknameRef?.current?.value,
     }
 
-    console.log(request)
-
     await fetch(`${API.MAIN_DOMAIN + API.PATH_USER_REGISTER}`, {
       method: 'POST',
       headers: {
@@ -58,8 +56,6 @@ export default function CreateAccount() {
       user_pw: loginPwRef?.current?.value,
     }
 
-    console.log(request)
-
     await fetch(`${API.MAIN_DOMAIN + API.PATH_USERS}`, {
       method: 'POST',
       headers: {
@@ -80,11 +76,13 @@ export default function CreateAccount() {
             description: '환영합니다.',
           })
         }
+        return res.json()
       })
-      .then((res) => res.json())
+      // .then((res) => res.json())
       .then((data) => {
         localStorage.setItem('loginStatus', JSON.stringify(data))
       })
+      .catch((err) => console.log(err))
   }
 
   return (
