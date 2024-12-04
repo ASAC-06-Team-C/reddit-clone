@@ -110,7 +110,7 @@ export default function CreateAccount() {
                   </div>
                   <div className='space-y-1'>
                     <Label htmlFor='password'>Password</Label>
-                    <Input id='password' placeholder='password' ref={loginPwRef} />
+                    <Input id='password' placeholder='password' type='password' ref={loginPwRef} />
                   </div>
                 </CardContent>
                 <CardFooter>

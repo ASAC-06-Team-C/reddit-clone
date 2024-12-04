@@ -11,6 +11,7 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import CreateAccount from '@/components/CreateAccount'
 
 export default function DialogButton() {
   return (
@@ -19,7 +20,7 @@ export default function DialogButton() {
         <Tooltip>
           <DialogTrigger asChild>
             <TooltipTrigger>
-              <Button>Log in</Button>
+              <Button>Account</Button>
             </TooltipTrigger>
           </DialogTrigger>
           <TooltipContent>
@@ -27,30 +28,8 @@ export default function DialogButton() {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <DialogContent className='sm:max-w-[425px]'>
-        <DialogHeader>
-          <DialogTitle>Log in</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription>
-        </DialogHeader>
-        <div className='grid gap-4 py-4'>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='name' className='text-right'>
-              Name
-            </Label>
-            <Input id='name' placeholder='Username' className='col-span-3' />
-          </div>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='username' className='text-right'>
-              Username
-            </Label>
-            <Input id='username' placeholder='Password' className='col-span-3' />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type='submit'>Log in</Button>
-        </DialogFooter>
+      <DialogContent className='sm:max-w-[500px]'>
+        <CreateAccount />
       </DialogContent>
     </Dialog>
   )
