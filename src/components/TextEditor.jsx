@@ -54,7 +54,7 @@ function TextEditor() {
           post_draft: isDraft,
         }
     console.log(requestObject)
-    await fetch(`${API.MAIN_DOMAIN}/${isDraft ? API.PATH_DRAFTS : API.PATH_POSTS}`, {
+    await fetch(`${API.MAIN_DOMAIN}${isDraft ? API.PATH_DRAFTS : API.PATH_POSTS}`, {
       method: postNumberParam?.post_no ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',

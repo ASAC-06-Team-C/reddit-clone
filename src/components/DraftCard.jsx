@@ -12,6 +12,7 @@ import * as API from '@/constants/API'
 export default function DraftCard({ content, index, draft, setDraft }) {
   const { toast } = useToast()
   async function deleteDraft(index, post_no) {
+    const userNo = JSON.parse(localStorage.getItem('loginStatus')).user_no
     console.log(draft)
     await fetch(`${API.MAIN_DOMAIN + API.PATH_DRAFTS}`, {
       method: 'DELETE',
@@ -20,7 +21,7 @@ export default function DraftCard({ content, index, draft, setDraft }) {
       },
       body: JSON.stringify({
         post_no: post_no,
-        user_no: 0,
+        user_no: userNo,
       }),
     })
       .then((res) => {

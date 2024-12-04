@@ -22,7 +22,7 @@ function TitleContextProvider({ children }) {
 }
 
 async function getDrafts() {
-  const dummyUserNo = 0
+  const dummyUserNo = JSON.parse(localStorage.getItem('loginStatus')).user_no
   const request = await fetch(`${API.MAIN_DOMAIN + API.PATH_DRAFTS}/?user_no=${dummyUserNo}`)
   const response = await request.json()
   return response
